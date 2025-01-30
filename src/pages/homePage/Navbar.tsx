@@ -10,7 +10,8 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-[#000033] p-2 lg:px-12 md:px-6 shadow-md">
+    //bg-[#000033]
+    <nav className=" p-2 lg:px-12 md:px-6 shadow-md">
       <div className="container mx-auto flex justify-between items-center">
         {/* Logo */}
         <div className="flex items-center">
@@ -32,7 +33,7 @@ const Navbar = () => {
               to="/"
               className={({ isActive }) =>
                 isActive
-                  ? "text-white font-bold text-md border-b-2 border-b-fuchsia-500"
+                  ? "text-white font-bold text-md border-b-2 border-b-[#a144df]"
                   : "text-white text-md hover:text-gray-300"
               }
             >
@@ -44,7 +45,7 @@ const Navbar = () => {
               to="/about"
               className={({ isActive }) =>
                 isActive
-                  ? "text-white font-bold text-md border-b-2 border-b-fuchsia-500"
+                  ? "text-white font-bold text-md border-b-2 border-b-[#a144df]"
                   : "text-white text-md hover:text-gray-300"
               }
             >
@@ -56,7 +57,7 @@ const Navbar = () => {
               to="/contact"
               className={({ isActive }) =>
                 isActive
-                  ? "text-white font-bold text-md border-b-2 border-b-fuchsia-500"
+                  ? "text-white font-bold text-md border-b-2 border-b-[#a144df]"
                   : "text-white text-md hover:text-gray-300"
               }
             >
@@ -68,7 +69,7 @@ const Navbar = () => {
                 to="/dashboard"
                 className={({ isActive }) =>
                   isActive
-                ? "text-white font-bold text-md border-b-2 border-b-fuchsia-500"
+                ? "text-white font-bold text-md border-b-2 border-b-[#a144df]"
                 : "text-white text-md hover:text-gray-300"
           
                 }
@@ -82,7 +83,7 @@ const Navbar = () => {
                 to="/login"
                 className={({ isActive }) =>
                   isActive
-                ? "text-white font-bold text-md border-b-2 border-b-fuchsia-500"
+                ? "text-white font-bold text-md border-b-2 border-b-[#a144df]"
                 : "text-white text-md hover:text-gray-300"
                 }
                 onClick={toggleMenu}

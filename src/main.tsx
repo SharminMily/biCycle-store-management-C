@@ -9,7 +9,7 @@ import "primereact/resources/themes/lara-light-cyan/theme.css";
 import 'primeicons/primeicons.css';
 
 createRoot(document.getElementById('root')!).render(
-  <div className="max-w-7xl mx-auto">
+  <div className="max-w-7xl mx-auto bg-[#010113]">
   <PrimeReactProvider>
   <StrictMode>  
     <RouterProvider router={router} />
