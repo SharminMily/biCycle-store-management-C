@@ -3,12 +3,19 @@ import App from "../App";
 import About from "../pages/About";
 import Contact from "../pages/Contact";
 import HomePage from "../pages/homePage/HomePage";
+import HomeLayout from "../components/layout/HomeLayout"
+import Login from "../pages/from/Login";
+import Register from "../pages/from/Login";
 
 const router = createBrowserRouter([
     {
         path: '/',
-        element: <HomePage />,
+        element: <HomeLayout />,
         children: [
+            {
+                path: '/',
+                element: <HomePage />
+              },
             {
               path: 'about',
               element: <About />
@@ -24,8 +31,13 @@ const router = createBrowserRouter([
         element: <App />,
     },
     {
-        path: 'login',
-        element: <About />
+        path: '/login',
+        element: <Login />
+        
+    },
+    {
+        path: '/register',
+        element: <Register />
         
     }
 ])

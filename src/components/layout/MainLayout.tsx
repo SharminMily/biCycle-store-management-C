@@ -1,71 +1,49 @@
+import React, { useState } from "react";
 
 const items = [
-  {
-    key: 'asdfgh',
-    label: 'Dashboard1'
-  },
-  {
-    key: 'asdfgh22',
-    label: 'Dashboard2'
-  },
-  {
-    key: 'asdfgh33',
-    label: 'Dashboard3'
-  },
-  {
-    key: 'asdfgh44',
-    label: 'Dashboard4'
-  },
-  {
-    key: 'asdfgh55',
-    label: 'Dashboard5'
-  },
-]
-
-// const items = [UserOutlined, VideoCameraOutlined, UploadOutlined, UserOutlined].map(
-//   (icon, index) => ({
-//     key: String(index + 1),
-//     icon: React.createElement(icon),
-//     label: `nav ${index + 1}`,
-//   }),
-// );
+  { key: "1", label: "Dashboard1" },
+  { key: "2", label: "Dashboard2" },
+  { key: "3", label: "Dashboard3" },
+  { key: "4", label: "Dashboard4" },
+  { key: "5", label: "Dashboard5" },
+];
 
 const MainLayout = () => {
+  const [isCollapsed, setIsCollapsed] = useState(false);
+
   return (
-    // <Layout style={{height: '100vh'}}>
-    // <Sider
-    //   breakpoint="lg"
-    //   collapsedWidth="0"
-    //   onBreakpoint={(broken) => {
-    //     console.log(broken);
-    //   }}
-    //   onCollapse={(collapsed, type) => {
-    //     console.log(collapsed, type);
-    //   }}
-    // >
-    //   <div style={{color: 'white' }}>
-    //     <h1>ph</h1> </div>
-    //   <Menu theme="dark" mode="inline" defaultSelectedKeys={['4']} items={items} />
-    // </Sider>
-    // <Layout>
-    //   <Header style={{ padding: 0 }} />
-    //   <Content style={{ margin: '24px 16px 0' }}>
-    //     <div
-    //       style={{
-    //         padding: 24,
-    //         minHeight: 360,
-          
-    //       }}
-    //     >
-    //       Hello world
-    //     </div>
-    //   </Content>
-    
-    //   </Layout>
-    // </Layout>
- 
-<></>
+    <div className="flex h-screen bg-gray-100">
+      {/* Sidebar */}
+      <div
+        className={`bg-gray-900 text-white w-64 p-5 transition-all ${
+          isCollapsed ? "w-16" : "w-64"
+        }`}
+      >
+        <button
+          className="mb-4 bg-gray-700 px-2 py-1 rounded hover:bg-gray-600"
+          onClick={() => setIsCollapsed(!isCollapsed)}
+        >
+          {isCollapsed ? "☰" : "✖"}
+        </button>
+        <ul className="space-y-2">
+          {items.map((item) => (
+            <li
+              key={item.key}
+              className="px-4 py-2 rounded hover:bg-gray-700 cursor-pointer"
+            >
+              {item.label}
+            </li>
+          ))}
+        </ul>
+      </div>
 
-   )}
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col">
+        <header className="bg-white shadow p-4">Header</header>
+        <main className="flex-1 p-6">Hello World</main>
+      </div>
+    </div>
+  );
+};
 
-export default MainLayout
+export default MainLayout;

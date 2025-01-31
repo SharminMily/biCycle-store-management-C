@@ -10,8 +10,8 @@ const Navbar = () => {
   };
 
   return (
-    //bg-[#000033]
-    <nav className=" p-2 lg:px-12 md:px-6 shadow-md">
+    //bg-[#000033] fixed left-0
+    <nav className="  p-2 lg:px-12 md:px-6 shadow-md">
       <div className="container mx-auto flex justify-between items-center">
         {/* Logo */}
         <div className="flex items-center">

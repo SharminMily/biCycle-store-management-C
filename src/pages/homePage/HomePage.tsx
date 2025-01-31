@@ -1,21 +1,18 @@
-import Banner from "./Banner"
-import Footer from "./Footer"
-import Navbar from "./Navbar"
+import Banner from "./Banner";
+import BycicleCard from "./BycicleCard";
+import DiscountCard from "./DiscountCard";
+import OneRide from "./OneRide";
 
 const HomePage = () => {
   return (
-    <div>
-     
-        < Navbar />
-        <Banner />
-        <h1 className="text-3xl font-bold underline">
-      Hello world!
-    </h1>
-        < Footer/>
-
-       
+    <div>   
+      <Banner />
+      <OneRide />
+      <BycicleCard />
+      <DiscountCard /> 
+    
     </div>
-  )
-}
+  );
+};
 
-export default HomePage
+export default HomePage;

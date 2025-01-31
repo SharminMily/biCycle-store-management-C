@@ -16,43 +16,41 @@ const Banner = () => {
 
   const bannerTemplate = (banner: string) => {
     return (
-      <div className=" grid grid-cols-2 justify-center items-center gap-4 w-full lg:p-10">
-        <div className="text-white ">
-          <h1 className="text-white text-5xl pb-2">ByCicle store...</h1>
-          <span className="text-sm pb-4">
+      <div className=" md:grid grid-cols-2 justify-center items-center gap-4 w-full lg:p-10 p-4">
+        <div className="text-center md:text-start text-white md:pb-0 pb-10">
+          <h1 className="text-white md:text-5xl  md:font-bold text-3xl pb-2">
+            ByCicle store...
+          </h1>
+          <span className="md:text-sm text-[10px] pb-4">
             Welcome to ByCicle store, your one-stop shop for all things cycling!
             Whether you're a casual rider, a dedicated enthusiast, or a
-            competitive athlete, we have everything you need to fuel your
-            passion for cycling. <br /> Let me know if you'd like to tailor this further!
-          </span>{" "}
+            competitive athlete, passion for cycling. <br /> Let me know if
+            you'd like to tailor this further!
+          </span>
           <br />
-          {/* <button className="mt-5 px-4 py-2 border text-white text-sm rounded-lg shadow-lg 
-bg-gradient-to-r from-[#7f39af] to-[#082d8a] hover:opacity-90 transition duration-300">
-  Shop Now
-</button> */}
           <button
-            className="mt-5 border border-gray-400 px-4 py-2 text-white font-semibold rounded-lg shadow-lg 
+            className="mt-5 border border-gray-400 md:px-4 md:py-2 px-2 text-white font-semibold rounded-lg shadow-lg 
 bg-gradient-to-r from-[#a144df] to-[#010113] hover:opacity-90 transition duration-300"
           >
             Shop Now
           </button>
-          <div className="flex space-x-6 align-middle text-white mt-8">
+          <div className="flex justify-center md:justify-start space-x-6 align-middle text-white mt-8">
             <div>
-              <h1 className="font-bold text-xl">
+              <h1 className="font-bold md:text-2xl">
                 39Km<span className="font-medium text-[10px]">/hr</span>
               </h1>
               <p className="text-[10px]">Top Speed</p>
             </div>
             <div>
-              <h1 className="font-bold text-xl">90Km </h1>
+              <h1 className="font-bold md:text-2xl">90Km </h1>
               <p className="text-[10px]">Battery Range</p>
             </div>
             <div>
-              <h1 className="font-bold text-xl">2.5h </h1>
+              <h1 className="font-bold md:text-2xl">2.5h </h1>
               <p className="text-[10px]">Charging Time</p>
             </div>
             <div>
-              <h1 className="font-bold text-xl">15Kg </h1>
+              <h1 className="font-bold md:text-2xl">15Kg </h1>
               <p className="text-[10px]">weight</p>
             </div>
           </div>
