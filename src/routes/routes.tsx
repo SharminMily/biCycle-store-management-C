@@ -5,7 +5,7 @@ import Contact from "../pages/Contact";
 import HomePage from "../pages/homePage/HomePage";
 import HomeLayout from "../components/layout/HomeLayout"
 import Login from "../pages/from/Login";
-import Register from "../pages/from/Login";
+import Signup from "../pages/from/Signup";
 
 const router = createBrowserRouter([
     {
@@ -36,8 +36,8 @@ const router = createBrowserRouter([
         
     },
     {
-        path: '/register',
-        element: <Register />
+        path: '/signUp',
+        element: <Signup />
         
     }
 ])
