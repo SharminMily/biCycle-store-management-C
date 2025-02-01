@@ -2,7 +2,7 @@
 const BycicleCard = () => {
   return (
     <div className="">
-        <h1 className="text-4xl text-white text-center pb-4 font-semibold">Bycilec card Details </h1>
+        <h1 className="text-4xl text-white text-center pb-4 font-semibold">Featured Bicycles</h1>
     <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-4 md:m-6 m-10">
 
       <div className="relative p-2 border border-gray-400 w-full max-w-sm text-white rounded-lg shadow-lg overflow-hidden">

@@ -39,6 +39,18 @@ const Navbar = () => {
             >
               Home
             </NavLink>
+          </li>         
+          <li>
+            <NavLink
+              to="/all-bycicles"
+              className={({ isActive }) =>
+                isActive
+                  ? "text-white font-bold text-md border-b-2 border-b-[#a144df]"
+                  : "text-white text-md hover:text-gray-300"
+              }
+            >
+              Bycicles
+            </NavLink>
           </li>
           <li>
             <NavLink
@@ -50,18 +62,6 @@ const Navbar = () => {
               }
             >
               About
-            </NavLink>
-          </li>
-          <li>
-            <NavLink
-              to="/contact"
-              className={({ isActive }) =>
-                isActive
-                  ? "text-white font-bold text-md border-b-2 border-b-[#a144df]"
-                  : "text-white text-md hover:text-gray-300"
-              }
-            >
-              Contact
             </NavLink>
           </li>
           <li>
@@ -119,6 +119,20 @@ const Navbar = () => {
                 Home
               </NavLink>
             </li>
+          
+            <li>
+              <NavLink
+                to="/all-bycicles"
+                className={({ isActive }) =>
+                  isActive
+                ? "text-white font-bold text-md border-b-2 border-b-fuchsia-500"
+                : "text-white text-md hover:text-gray-300"
+                }
+                onClick={toggleMenu}
+              >
+                bicycles
+              </NavLink>
+            </li>
             <li>
               <NavLink
                 to="/about"
@@ -130,19 +144,6 @@ const Navbar = () => {
                 onClick={toggleMenu}
               >
                 About
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/contact"
-                className={({ isActive }) =>
-                  isActive
-                ? "text-white font-bold text-md border-b-2 border-b-fuchsia-500"
-                : "text-white text-md hover:text-gray-300"
-                }
-                onClick={toggleMenu}
-              >
-                Contact
               </NavLink>
             </li>
             <li>
