@@ -11,7 +11,7 @@ import { Provider } from 'react-redux';
 import { store } from './redux/store.ts';
 
 createRoot(document.getElementById('root')!).render(
-  <div className="max-w-7xl mx-auto bg-[#010113]">
+  <div className="max-w-8xl mx-auto bg-[#010113]">
   <PrimeReactProvider>
   <StrictMode> 
     <Provider store={store}></Provider> 
