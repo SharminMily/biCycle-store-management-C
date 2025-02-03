@@ -8,14 +8,20 @@ import { PrimeReactProvider } from 'primereact/api';
 import "primereact/resources/themes/lara-light-cyan/theme.css";
 import 'primeicons/primeicons.css';
 import { Provider } from 'react-redux';
-import { store } from './redux/store.ts';
+import { persistor, store } from './redux/store.ts';
+import { PersistGate } from 'redux-persist/integration/react';
+import { Toaster } from 'sonner';
 
 createRoot(document.getElementById('root')!).render(
   <div className="max-w-8xl mx-auto bg-[#010113]">
   <PrimeReactProvider>
   <StrictMode> 
-    <Provider store={store}></Provider> 
+    <Provider store={store}>
+    <PersistGate loading={null} persistor={persistor}> 
     <RouterProvider router={router} />
+    </PersistGate>
+    <Toaster />
+    </Provider> 
   </StrictMode>
    </PrimeReactProvider>
    </div>
