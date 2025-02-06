@@ -1,7 +1,8 @@
 import Banner from "./Banner";
-import BycicleCard from "./BycicleCard";
+import BycicleCard from "./BicycleCard";
 import DiscountCard from "./DiscountCard";
 import OneRide from "./OneRide";
+import Testimonials from "./Testimonials";
 
 const HomePage = () => {
   return (
@@ -10,6 +11,7 @@ const HomePage = () => {
       <OneRide />
       <BycicleCard />
       <DiscountCard /> 
+      <Testimonials />
     
     </div>
   );

@@ -7,6 +7,7 @@ import { ReactNode } from "react";
 type TProtectedRoute = {
     children: ReactNode;
     role: string | undefined;
+    allowedRoles: string[];
   };
   
   const ProtectedRoute = ({ children, role }: TProtectedRoute) => {

@@ -42,7 +42,7 @@ const Navbar = () => {
           </li>         
           <li>
             <NavLink
-              to="/all-bycicles"
+              to="/all-bicycles"
               className={({ isActive }) =>
                 isActive
                   ? "text-white font-bold text-md border-b-2 border-b-[#a144df]"
@@ -122,7 +122,7 @@ const Navbar = () => {
           
             <li>
               <NavLink
-                to="/all-bycicles"
+                to="/all-bicycles"
                 className={({ isActive }) =>
                   isActive
                 ? "text-white font-bold text-md border-b-2 border-b-fuchsia-500"

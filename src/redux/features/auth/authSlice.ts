@@ -1,13 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../../store";
 
-export type TUser = {
-    userId: string;
-    role: string;
-    iat: number;
-    exp: number;
-  };
-  
+import { JwtPayload } from "jsonwebtoken";  // Ensure you import this
+
+export interface TUser extends JwtPayload {
+  id: string;
+  email: string;
+  role: "admin" | "user";  
+}
+ 
 type TAuthState = {
     user: null | object;
     token: null | string;

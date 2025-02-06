@@ -1,8 +1,9 @@
+/* eslint-disable react-refresh/only-export-components */
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import App from "../App";
 import About from "../pages/About";
 import HomePage from "../pages/homePage/HomePage";
-import HomeLayout from "../components/layout/MainLayout"
+import HomeLayout from "../components/layout/MainLayout";
 import Login from "../pages/from/Login";
 import Signup from "../pages/from/Signup";
 import ErrorPage from "../pages/ErrorPage/ErrorPage";
@@ -16,6 +17,10 @@ import UserHome from "../pages/dashboard/userDashboard/UserHome";
 import { useAppSelector } from "../redux/hooks";
 import { verifyToken } from "../utils/verifyToken";
 import { useCurrentToken } from "../redux/features/auth/authSlice";
+import BicycleDetails from "../pages/homePage/BicycleDetails";
+import ManageOrder from "../pages/dashboard/userDashboard/ManageOrder";
+import OrderDetails from "../pages/dashboard/userDashboard/OrderDetails";
+import AddReview from "../pages/dashboard/userDashboard/AddReview";
 
 // User Role Constants
 const userRole = {
@@ -39,7 +44,6 @@ const DashboardRedirect = () => {
   );
 };
 
-
 // Define Routes
 const router = createBrowserRouter([
   {
@@ -49,7 +53,7 @@ const router = createBrowserRouter([
     children: [
       { path: "/", element: <HomePage /> },
       { path: "all-bicycles", element: <AllBicycles /> },
-      { path: "bicycles-details", element: <About /> },
+      { path: "bicycles-details/:id", element: <BicycleDetails /> },
       { path: "about", element: <About /> },
     ],
   },
@@ -66,11 +70,7 @@ const router = createBrowserRouter([
       },
       {
         path: "adminHome",
-        element: (
-          <ProtectedRoute allowedRoles={[userRole.Admin]}>
-            <AdminHome />
-          </ProtectedRoute>
-        ),
+        element: <AdminHome />,
       },
       {
         path: "add-bicycle",
@@ -90,19 +90,23 @@ const router = createBrowserRouter([
       },
       {
         path: "all-users",
-        element: (
-          <ProtectedRoute allowedRoles={[userRole.Admin]}>
-            <AllUser />
-          </ProtectedRoute>
-        ),
+        element: <AllUser />,
       },
       {
-        path: "userHome",
-        element: (
-          <ProtectedRoute allowedRoles={[userRole.User]}>
-            <UserHome />
-          </ProtectedRoute>
-        ),
+        path: "myHome",
+        element: <UserHome />,
+      },
+      {
+        path: "manage-order",
+        element: <ManageOrder />,
+      },
+      {
+        path: "order-details",
+        element: <OrderDetails />,
+      },
+      {
+        path: "add-review",
+        element: <AddReview />,
       },
     ],
   },

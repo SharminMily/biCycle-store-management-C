@@ -25,24 +25,28 @@ const MainLayout = () => {
   };
 
   return (
-    <div className="flex w-full h-screen bg-gray-100">
+    <div className="flex min-h-screen w-full bg-gray-100 overflow-hidden">
       {/* Sidebar */}
-      <button className="bg-red-500 text-white"></button>
+      <div className="f0 min-h-screen">
+        {/* Sidebar Routes based on Role */}
+        {user?.role === userRole.Admin ? <AdminRoutes /> : <UserRoutes />}
+      </div>
 
-      {/* Sidebar Routes based on Role */}
-      {user?.role === userRole.Admin ? <AdminRoutes /> : <UserRoutes />}
-
-      <div className="flex-1">
-        <header className="bg-white shadow p-4 mb-8">
+      {/* Main Content Section */}
+      <div className="flex-1 flex flex-col min-h-screen overflow-auto">
+        {/* Header */}
+        <header className="bg-white shadow p-4">
           <div className="flex justify-end">
-            <button onClick={handleLogout} className="bg-red-500 text-white py-2 px-4">
+            <button onClick={handleLogout} className="bg-red-500 text-white py-2 px-4 rounded">
               Logout
             </button>
           </div>
         </header>
 
         {/* Main Content */}
-        <Outlet />
+        <div className="flex-1 overflow-auto p-4">
+          <Outlet />
+        </div>
       </div>
     </div>
   );
