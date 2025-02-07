@@ -32,7 +32,7 @@ dispatch(setUser({
   if (user.role === "admin") {
     navigate("/dashboard/adminHome");
   } else {
-    navigate("/dashboard/userHome");
+    navigate("/dashboard/myHome");
   }
 }
   catch (err) {

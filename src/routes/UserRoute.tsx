@@ -31,7 +31,7 @@ const UserRoutes = () => {
 
        {/* all route */}
         <li className="flex items-center gap-2 pb-3 mt-4 p-2">
-          <NavLink to="/dashboard/userHome" className="">
+          <NavLink to="/dashboard/myHome" className="">
           Home
           </NavLink>
         </li>

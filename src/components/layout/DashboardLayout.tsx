@@ -1,9 +1,10 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, Navigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { logout, useCurrentToken } from "../../redux/features/auth/authSlice";
 import AdminRoutes from "../../routes/AdminRoutes";
-import UserRoutes from "../../routes/UserRoute";
+
 import { verifyToken } from "../../utils/verifyToken";
+import UserRoutes from "../../routes/UserRoute";
 
 const userRole = {
   Admin: "admin",
@@ -18,6 +19,11 @@ const MainLayout = () => {
 
   if (token) {
     user = verifyToken(token); // Ensure `verifyToken` returns a user object with `role`
+  }
+
+  // If no token or user, redirect to login
+  if (!user) {
+    return <Navigate to="/login" />;
   }
 
   const handleLogout = () => {

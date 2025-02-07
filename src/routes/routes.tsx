@@ -13,7 +13,7 @@ import AllBicycles from "../pages/homePage/AllBicycles";
 import AddBicycle from "../pages/dashboard/adminDashboard/AddBicycle";
 import AllUser from "../pages/dashboard/adminDashboard/AllUser";
 import ProtectedRoute from "../components/layout/ProtectedRoute";
-import UserHome from "../pages/dashboard/userDashboard/UserHome";
+import MyHome from "../pages/dashboard/userDashboard/myHome";
 import { useAppSelector } from "../redux/hooks";
 import { verifyToken } from "../utils/verifyToken";
 import { useCurrentToken } from "../redux/features/auth/authSlice";
@@ -21,6 +21,8 @@ import BicycleDetails from "../pages/homePage/BicycleDetails";
 import ManageOrder from "../pages/dashboard/userDashboard/ManageOrder";
 import OrderDetails from "../pages/dashboard/userDashboard/OrderDetails";
 import AddReview from "../pages/dashboard/userDashboard/AddReview";
+import Orders from "../pages/dashboard/adminDashboard/Orders";
+import Checkout from "../pages/homePage/Checkout";
 
 // User Role Constants
 const userRole = {
@@ -40,10 +42,10 @@ const DashboardRedirect = () => {
   return user.role === userRole.Admin ? (
     <Navigate to="/dashboard/adminHome" replace />
   ) : (
-    <Navigate to="/dashboard/userHome" replace />
+    <Navigate to="/dashboard/myHome" replace />
   );
 };
-
+///checkout?bicycles=${bicycle._id}
 // Define Routes
 const router = createBrowserRouter([
   {
@@ -54,6 +56,7 @@ const router = createBrowserRouter([
       { path: "/", element: <HomePage /> },
       { path: "all-bicycles", element: <AllBicycles /> },
       { path: "bicycles-details/:id", element: <BicycleDetails /> },
+      { path: "checkout", element: <Checkout /> },
       { path: "about", element: <About /> },
     ],
   },
@@ -89,12 +92,16 @@ const router = createBrowserRouter([
         ),
       },
       {
+        path: "orders",
+        element: <Orders />,
+      },
+      {
         path: "all-users",
         element: <AllUser />,
       },
       {
         path: "myHome",
-        element: <UserHome />,
+        element: <MyHome />,
       },
       {
         path: "manage-order",

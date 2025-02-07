@@ -1,11 +1,24 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useGetProductsQuery } from "../../redux/features/admin/product/productApi";
 
 const BicycleDetails = () => {
   const { id } = useParams(); // Get bicycle ID from URL
-  const { data: products } = useGetProductsQuery(undefined);
-  // const [bicycles, setBicycles] = useState<TProduct[]>([]);
-  const bicycle = products?.data.find((bike) => bike._id === id);
+  const navigate = useNavigate();
+  const { data: products, isFetching, error } = useGetProductsQuery(undefined);
+
+  if (isFetching) {
+    return <p className="text-center text-white">Loading...</p>;
+  }
+
+  if (error) {
+    return <p className="text-center text-red-500">Failed to load data.</p>;
+  }
+
+  if (!products?.data || products.data.length === 0) {
+    return <p className="text-center text-red-500">No bicycles available!</p>;
+  }
+
+  const bicycle = products.data.find((bike) => bike._id === id);
 
   if (!bicycle) {
     return <p className="text-center text-white">Bicycle not found!</p>;
@@ -17,11 +30,7 @@ const BicycleDetails = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Image Section */}
           <div className="flex justify-center">
-            <img
-              src={bicycle.image}
-              alt={bicycle.name}
-              className="w-full h-64 object-cover rounded-lg"
-            />
+            <img src={bicycle.image} alt={bicycle.name} className="w-full h-64 object-cover rounded-lg" />
           </div>
 
           {/* Details Section */}
@@ -34,9 +43,13 @@ const BicycleDetails = () => {
               {bicycle.quantity > 0 ? `Stock: ${bicycle.quantity}` : "Out of Stock"}
             </p>
 
-            <button className=" mt-4 px-2 w-full border border-gray-500 py-3 text-[12px] text-white rounded-lg hover:bg-blue-700 bg-gradient-to-r from-[#a144df] to-[#010113] hover:opacity-90 transition duration-300">
-                Buy Now
-              </button>
+            {/* Buy Now Button - Redirects to Checkout Page */}
+            <button
+              onClick={() => navigate(`/checkout?products=${bicycle._id}`)} 
+              className="mt-4 px-2 w-full border border-gray-500 py-3 text-[12px] text-white rounded-lg hover:bg-blue-700 bg-gradient-to-r from-[#a144df] to-[#010113] hover:opacity-90 transition duration-300"
+            >
+              Buy Now
+            </button>
           </div>
         </div>
       </div>
