@@ -25,7 +25,8 @@ const AllBicycles = () => {
       {isFetching ? (
         <p className="text-center text-white">Loading...</p>
       ) : (
-        <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-4 md:m-6 m-10">
+        <div className="flex justify-center items-center">
+          <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4 md:m-6 m-10">
           {bicycles.map(({ _id, name, brand, price, quantity, image }) => (
             <div
               key={_id}
@@ -63,6 +64,7 @@ const AllBicycles = () => {
               </div>
             </div>
           ))}
+        </div>
         </div>
       )}
     </div>

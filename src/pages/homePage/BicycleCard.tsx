@@ -25,7 +25,7 @@ const BycicleCard = () => {
         <p className="text-center text-white">Loading...</p>
       ) : (
         <>
-          <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-8 md:m-6 my-10">
+          <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-8 md:m-6 my-10">
             {bicycles.map(({ _id, name, brand, price, quantity, image }) => (
               <div
                 key={_id}
