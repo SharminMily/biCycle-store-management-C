@@ -11,17 +11,29 @@ const productApi = baseApi.injectEndpoints({
         body: data,
       }),
     }),
-    getProducts: builder.query({
-      query: () => {
-        return { url: "/products", method: "GET" };
-      },
-      transformResponse: (response: TResponseRedux<TProduct[]>) => {
-        return {
-          data: response.data,
-          meta: response.meta,
-        };
-      },
-    }),
+  // productApi.ts
+getProducts: builder.query({
+  query: (filters = {}) => {
+    const queryParams = new URLSearchParams();
+
+    if (filters.search) queryParams.append("search", filters.search);
+    if (filters.brand) queryParams.append("brand", filters.brand);
+    if (filters.type) queryParams.append("type", filters.type);
+    if (filters.minPrice) queryParams.append("minPrice", filters.minPrice);
+    if (filters.maxPrice) queryParams.append("maxPrice", filters.maxPrice);
+    if (filters.model) queryParams.append("model", filters.model);
+    if (filters.available) queryParams.append("available", filters.available);
+
+    return { url: `/products?${queryParams.toString()}`, method: "GET" };
+  },
+  transformResponse: (response: TResponseRedux<TProduct[]>) => {
+    return {
+      data: response.data,
+      meta: response.meta,
+    };
+  },
+}),
+
     updateProducts: builder.mutation({
       query: ({ id, data }) => ({
         url: `/products/${id}`,
