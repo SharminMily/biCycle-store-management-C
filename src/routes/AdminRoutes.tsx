@@ -51,7 +51,7 @@ const AdminRoutes = () => {
       </li>
       <li className="flex items-center gap-2 pb-3 mt-4 p-2">
         <NavLink to="/dashboard/orders" className="">
-          Manage Users
+          Manage Orders
         </NavLink>
       </li>
       <Divider

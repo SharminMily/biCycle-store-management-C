@@ -1,41 +1,61 @@
-import { useState } from "react";
+import { toast } from "sonner";
+import { setUser } from "../../redux/features/auth/authSlice";
+import { useNavigate } from "react-router-dom";
+import { useAppDispatch } from "../../redux/hooks";
+import { FieldValues, useForm } from "react-hook-form";
+import { useSignUpMutation } from "../../redux/features/auth/authApi";
 
-const  Signup = () => {
-  const [name, setName] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [image, setImage] = useState<string>("");
+const Signup = () => {
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const { register, handleSubmit } = useForm();
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setName("");
-    setPassword("");
-    setEmail("");
-    setImage("");
-    console.log("name:", name);
-    console.log("Email:", email);
-    console.log("Password:", password);
-    console.log("image:", image);
+  const [signUp] = useSignUpMutation();
+  const onSubmit = async (data: FieldValues) => {
+    const toastId = toast.loading(" signup....");
+    // console.log(data)
 
+    try {
+      const userInfo = {
+        name: data.name,
+        email: data.email,
+        password: data.password,
+        image: data.image,
+      };
+      console.log(userInfo);
+      const user = await signUp(userInfo).unwrap();  
+  
+  dispatch(setUser({
+            user, 
+  
+  }));
+
+  toast.success("Success....", { id: toastId, duration: 2000 });
+
+  // Ensure this is inside try block
+  navigate("/dashboard/myHome");
+} 
+catch (err) {
+  console.error("Signup Error:", err);
+  toast.error("Something went wrong....", { id: toastId, duration: 2000 });
+}
   };
+
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
-
       <div className="bg-[#010113] text-white p-8 rounded-lg shadow-xl w-96">
         <h2 className="text-2xl font-bold text-center mb-6"> Sign Up</h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
-
-              {/* Email Input */}
-              <div>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          {/* Email Input */}
+          <div>
             <label htmlFor="name" className="block text-gray-100 font-medium">
               Name
             </label>
             <input
               id="name"
-              type="name"
+              type="text"
               placeholder="Enter your name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              {...register("name")}
               className="w-full px-4 py-2 border rounded-lg text-gray-300  focus:outline-none focus:ring-2 focus:ring-blue-400"
               required
             />
@@ -50,8 +70,7 @@ const  Signup = () => {
               id="email"
               type="email"
               placeholder="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              {...register("email")}
               className="w-full px-4 py-2 border rounded-lg text-gray-300  focus:outline-none focus:ring-2 focus:ring-blue-400"
               required
             />
@@ -59,15 +78,17 @@ const  Signup = () => {
 
           {/* Password Input */}
           <div>
-            <label htmlFor="password" className="block text-gray-100 font-medium">
+            <label
+              htmlFor="password"
+              className="block text-gray-100 font-medium"
+            >
               Password
             </label>
             <input
               id="password"
               type="password"
               placeholder="Enter your password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              {...register("password")}
               className="w-full px-4 py-2 border rounded-lg text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
               required
             />
@@ -81,8 +102,7 @@ const  Signup = () => {
               id="image"
               type="text"
               placeholder="Enter your image link"
-              value={image}
-              onChange={(e) => setImage(e.target.value)}
+              {...register("image")}
               className="w-full px-4 py-2 border rounded-lg text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
               required
             />
@@ -94,7 +114,7 @@ const  Signup = () => {
             className="w-full  border border-gray-500 text-white py-2  hover:bg-blue-700 t font-semibold rounded-lg shadow-lg 
 bg-gradient-to-r from-[#a144df] to-[#040431] hover:opacity-90 transition duration-300"
           >
-           Sign Up
+            Sign Up
           </button>
         </form>
 
@@ -102,7 +122,7 @@ bg-gradient-to-r from-[#a144df] to-[#040431] hover:opacity-90 transition duratio
         <p className="text-center text-gray-400 mt-4">
           Have an account?{" "}
           <a href="/login" className="text-fuchsia-400 hover:underline">
-           Login
+            Login
           </a>
         </p>
       </div>
@@ -110,5 +130,4 @@ bg-gradient-to-r from-[#a144df] to-[#040431] hover:opacity-90 transition duratio
   );
 };
 
-export default  Signup;
-
+export default Signup;

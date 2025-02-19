@@ -6,27 +6,30 @@ import { ReactNode } from "react";
 
 type TProtectedRoute = {
     children: ReactNode;
-    role: string | undefined;
+    role?: string; 
     allowedRoles: string[];
   };
   
-  const ProtectedRoute = ({ children, role }: TProtectedRoute) => {
+  const ProtectedRoute = ({ children, allowedRoles }: TProtectedRoute) => {
     const token = useAppSelector(useCurrentToken);
+    const dispatch = useAppDispatch();
   
     let user;
-  
     if (token) {
       user = verifyToken(token);
     }
   
-    const dispatch = useAppDispatch();
+    // Fetch role from user instead of passing it as a prop
+    const role = user?.role;
   
-    if (role !== undefined && role !== user?.role) {
+    if (!token || !role) {
       dispatch(logout());
-      return <Navigate to="/login" replace={true} />;
+      return <Navigate to="/login" replace />;
     }
-    if (!token) {
-      return <Navigate to="/login" replace={true} />;
+  
+    if (!allowedRoles.includes(role)) {
+      dispatch(logout());
+      return <Navigate to="/login" replace />;
     }
   
     return children;

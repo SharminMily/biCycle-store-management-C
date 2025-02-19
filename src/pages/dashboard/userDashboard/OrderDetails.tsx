@@ -1,8 +1,10 @@
-import React from 'react'
+import VerifyOrder from '../../homePage/VerifyOrder'
 
 const OrderDetails = () => {
   return (
-    <div>OrderDetails</div>
+    <div className='my-8'>
+      <VerifyOrder />
+    </div>
   )
 }
 

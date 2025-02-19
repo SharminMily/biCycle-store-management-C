@@ -1,13 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { useAppDispatch } from "../../../redux/hooks";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { useAddProductsMutation } from "../../../redux/features/admin/product/productApi";
 
-
+type ApiError = {
+  data?: {
+    message?: string;
+  };
+};
 
 const AddBicycle = () => {
-  const dispatch = useAppDispatch();
   const [addProduct] = useAddProductsMutation();
   const { register, handleSubmit, reset } = useForm();
 
@@ -37,7 +39,7 @@ const AddBicycle = () => {
       reset();
     } catch (error) {
       console.error("Error:", error);
-      toast.error(error?.data?.message || "Failed to add bicycle", { id: toastId });
+      toast.error((error as ApiError)?.data?.message || "Failed to add bicycle", { id: toastId });
     }
   };
   

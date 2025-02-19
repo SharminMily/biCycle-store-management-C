@@ -27,12 +27,12 @@ const AllBicycles = () => {
 
   return (
     <div>
-      <h1 className="text-4xl text-white text-center pb-4 font-semibold">
+      <h1 className="text-4xl text-white text-center pb-8 font-semibold">
         Featured Bicycles
       </h1>
 
       {/* 🔹 Filter Section */}
-      <div className="text-white flex flex-wrap justify-between gap-4">
+      <div className="text-white flex flex-wrap justify-center gap-6 pb-6">
         {/* 🔍 Search */}
         <input
           type="text"

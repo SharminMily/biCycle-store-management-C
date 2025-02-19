@@ -1,12 +1,15 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useGetProductsQuery } from "../../redux/features/admin/product/productApi";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../../redux/features/cart/cartSlice";
+import { RootState } from "../../redux/store";
 
 const BicycleDetails = () => {
-  const { id } = useParams(); // URL থেকে বাইসাইকেলের ID নেওয়া হচ্ছে
+  const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const cartItems = useSelector((state: RootState) => state.cart.items);;// ✅ Move useSelector here
+  
   const { data: products, isFetching, error } = useGetProductsQuery(undefined);
 
   if (isFetching) {
@@ -25,9 +28,9 @@ const BicycleDetails = () => {
   }
 
   const handleBuyNow = () => {
-    // বাইসাইকেলের তথ্য কার্টে যোগ করা (ডিফল্ট পরিমাণ 1)
+    console.log("Adding to cart:", bicycle); 
     dispatch(addToCart({
-      product: bicycle._id, // cart slice এ আমরা product নামে expect করি
+      product: bicycle._id,
       name: bicycle.name,
       brand: bicycle.brand,
       model: bicycle.model,
@@ -36,9 +39,12 @@ const BicycleDetails = () => {
       description: bicycle.description,
       image: bicycle.image,
       quantity: 1,
-      stock: bicycle.quantity, // optional: যদি স্টক দেখানো লাগে
+      stock: bicycle.quantity,
+      inStock: bicycle.inStock,
+      id: ""
     }));
-    // Checkout পেজে রিডাইরেক্ট করা
+
+    console.log("Cart after adding:", cartItems); // ✅ Use the cart state from useSelector
     navigate("/checkout");
   };
 
@@ -46,11 +52,9 @@ const BicycleDetails = () => {
     <div className="flex justify-center items-center min-h-screen px-4 py-10">
       <div className="max-w-4xl w-full bg-gray-800 text-white p-6 rounded-lg shadow-lg">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* ইমেজ সেকশন */}
           <div className="flex justify-center">
             <img src={bicycle.image} alt={bicycle.name} className="w-full h-64 object-cover rounded-lg" />
           </div>
-          {/* ডিটেইল সেকশন */}
           <div className="flex flex-col justify-center">
             <h2 className="text-3xl font-bold">{bicycle.name}</h2>
             <p className="text-gray-200 text-xl mt-2">Brand: {bicycle.brand}</p>

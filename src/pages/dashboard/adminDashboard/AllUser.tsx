@@ -12,8 +12,9 @@ import { useDeleteUserMutation, useGetUsersQuery, useUpdateUserMutation } from "
 
 const AllUser = () => {
   const { data: users, isFetching, refetch } = useGetUsersQuery(undefined);
-  const [updateProduct] = useUpdateUserMutation();
-  const [deleteProduct] = useDeleteUserMutation();
+  console.log(users)
+  const [updateUser] = useUpdateUserMutation()
+  const [deleteUser] = useDeleteUserMutation();
 
   const [nodes, setNodes] = useState<TreeNode[]>([]);
   const [first, setFirst] = useState<number>(0);
@@ -53,7 +54,7 @@ const AllUser = () => {
     const toastId = toast.loading("Updating...");
 
     try {
-      await updateProduct({ id: selectedUser.key, data: { ...selectedUser.data } }).unwrap();
+      await updateUser({ id: selectedUser.key, data: { ...selectedUser.data } }).unwrap();
       toast.success("User updated successfully!", { id: toastId });
       refetch();
       setUpdateModalOpen(false);
@@ -65,7 +66,7 @@ const AllUser = () => {
   const handleDelete = async (id: string) => {
     const toastId = toast.loading("Deleting...");
     try {
-      await deleteProduct(id).unwrap();
+      await deleteUser(id).unwrap();
       toast.success("User deleted successfully!", { id: toastId });
       refetch();
     } catch (error) {

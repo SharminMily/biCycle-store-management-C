@@ -13,7 +13,7 @@ import AllBicycles from "../pages/homePage/AllBicycles";
 import AddBicycle from "../pages/dashboard/adminDashboard/AddBicycle";
 import AllUser from "../pages/dashboard/adminDashboard/AllUser";
 import ProtectedRoute from "../components/layout/ProtectedRoute";
-import MyHome from "../pages/dashboard/userDashboard/myHome";
+import MyHome from "../pages/dashboard/userDashboard/MyHome";
 import { useAppSelector } from "../redux/hooks";
 import { verifyToken } from "../utils/verifyToken";
 import { useCurrentToken } from "../redux/features/auth/authSlice";
@@ -23,6 +23,7 @@ import OrderDetails from "../pages/dashboard/userDashboard/OrderDetails";
 import AddReview from "../pages/dashboard/userDashboard/AddReview";
 import Orders from "../pages/dashboard/adminDashboard/Orders";
 import Checkout from "../pages/homePage/Checkout";
+import VerifyOrder from "../pages/homePage/VerifyOrder";
 
 // User Role Constants
 const userRole = {
@@ -55,8 +56,17 @@ const router = createBrowserRouter([
     children: [
       { path: "/", element: <HomePage /> },
       { path: "all-bicycles", element: <AllBicycles /> },
-      { path: "bicycles-details/:id", element: <BicycleDetails /> },
+
+      {
+        path: "bicycles-details/:id",
+        element: (
+          <ProtectedRoute allowedRoles={[userRole.User, userRole.Admin]}>
+            <BicycleDetails />
+          </ProtectedRoute>
+        ),
+      },
       { path: "checkout", element: <Checkout /> },
+      { path: "checkout/verify", element: <VerifyOrder /> },
       { path: "about", element: <About /> },
     ],
   },
@@ -73,7 +83,11 @@ const router = createBrowserRouter([
       },
       {
         path: "adminHome",
-        element: <AdminHome />,
+        element: (
+          <ProtectedRoute allowedRoles={[userRole.Admin]}>
+            <AdminHome />,
+          </ProtectedRoute>
+        ),
       },
       {
         path: "add-bicycle",
@@ -93,11 +107,19 @@ const router = createBrowserRouter([
       },
       {
         path: "orders",
-        element: <Orders />,
+        element: (
+          <ProtectedRoute allowedRoles={[userRole.Admin]}>
+            element: <Orders />,
+          </ProtectedRoute>
+        ),
       },
       {
         path: "all-users",
-        element: <AllUser />,
+        element: (
+          <ProtectedRoute allowedRoles={[userRole.Admin]}>
+            element: <AllUser />,
+          </ProtectedRoute>
+        ),
       },
       {
         path: "myHome",

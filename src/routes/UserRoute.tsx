@@ -35,11 +35,11 @@ const UserRoutes = () => {
           Home
           </NavLink>
         </li>
-        <li className="flex items-center gap-2 pb-3 mt-4 p-2">
+        {/* <li className="flex items-center gap-2 pb-3 mt-4 p-2">
           <NavLink to="/dashboard/manage-order" className="">
             Manage Order
           </NavLink>
-        </li>
+        </li> */}
         <li className="flex items-center gap-2 pb-3 mt-4 p-2">
           <NavLink to="/dashboard/order-details" className="">
           Order Details

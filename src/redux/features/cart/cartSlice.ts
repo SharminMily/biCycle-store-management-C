@@ -1,11 +1,17 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface ICartItem {
+  id: string;
     product: string; // Product ID
     name: string;
     price: number;
     quantity: number;
-    stock: number;
+   stock: number;
+    model:  string;
+    category:  string;
+    description:  string;
+    brand: string; 
+    inStock: boolean;
     image: string; // Optional: for displaying in the UI
   }
   
