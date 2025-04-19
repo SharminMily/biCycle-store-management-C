@@ -4,31 +4,34 @@ import { useLoginMutation } from "../../redux/features/auth/authApi";
 import { useAppDispatch } from "../../redux/hooks";
 import { setUser, TUser } from "../../redux/features/auth/authSlice";
 import { verifyToken } from "../../utils/verifyToken";
-import { useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 const Login = () => {
 const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const { register, handleSubmit } = useForm();
-
   const [login ] = useLoginMutation();
-  const onSubmit = async(data: FieldValues) => {
-   const toastId = toast.loading(" loging....")
-    // console.log(data)
 
- try {
-  const userInfo = {
-    email: data.email,
-    password: data.password,
-       };
-const res =  await  login(userInfo).unwrap();
-const user = verifyToken(res.data.accessToken) as TUser
-console.log( user);
+  const onSubmit = async (data: FieldValues) => {
+  const toastId = toast.loading("Logging in...");
+
+  try {
+    const userInfo = {
+      email: data.email,
+      password: data.password,
+    };
+
+    const res = await login(userInfo).unwrap();
+
+    const user = verifyToken(res.data.accessToken) as TUser;
+    console.log(user);
 
 dispatch(setUser({
-  user: {}, token: res.data.accessToken }))
+  user,
+  token: res.data.accessToken }))
   toast.success(" Success....", {id: toastId, duration: 2000})
+  
   if (user.role === "admin") {
     navigate("/dashboard/adminHome");
   } else {

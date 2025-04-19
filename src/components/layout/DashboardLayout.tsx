@@ -1,4 +1,4 @@
-import { Outlet, Navigate } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { logout, useCurrentToken } from "../../redux/features/auth/authSlice";
 import AdminRoutes from "../../routes/AdminRoutes";
@@ -28,6 +28,7 @@ const MainLayout = () => {
 
   const handleLogout = () => {
     dispatch(logout());
+    console.log(logout())
   };
 
   return (
