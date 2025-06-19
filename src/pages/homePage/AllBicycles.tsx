@@ -66,7 +66,7 @@ const AllBicycles = () => {
               type: e.target.value,             
             })
           }
-          className="p-2 border border-gray-300 rounded-md text-white"
+          className="p-2 border border-gray-300 rounded-md text-white bg-black"
         >
           <option value="">All Categories</option>
           <option value="Mountain">Mountain</option>
@@ -80,7 +80,7 @@ const AllBicycles = () => {
           onChange={(e) =>
             setFilters({ ...filters, available: e.target.value })
           }
-          className="p-2 border border-gray-300 rounded-md text-white"
+          className="p-2 border border-gray-300 rounded-md text-white bg-black"
         >
           <option value="">All</option>
           <option value="true">In Stock</option>

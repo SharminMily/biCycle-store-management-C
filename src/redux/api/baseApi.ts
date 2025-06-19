@@ -6,7 +6,7 @@ import { RootState } from "../store";
 //     ? "https://bicycle-store-backend-murex.vercel.app/api"
 //     : "http://localhost:5000/";
 // };
-
+//https://bicycle-store-backend-murex.vercel.app
 export const baseApi = createApi({
   reducerPath: "baseApi",
   baseQuery: fetchBaseQuery({
@@ -16,7 +16,7 @@ export const baseApi = createApi({
       const token = (getState() as RootState).auth.token;
 
       if (token) {
-        headers.set("Authorization", `Bearer ${token}`); // ✅ Attach token
+        headers.set("Authorization", `Bearer ${token}`); 
       }
 
       return headers;

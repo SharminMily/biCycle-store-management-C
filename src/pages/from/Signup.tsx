@@ -1,12 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { toast } from "sonner";
-import { setUser } from "../../redux/features/auth/authSlice";
-import { useNavigate, useLocation } from "react-router-dom";
-import { useAppDispatch } from "../../redux/hooks";
+import { useNavigate} from "react-router-dom";
 import { FieldValues, useForm } from "react-hook-form";
 import { useSignUpMutation } from "../../redux/features/auth/authApi";
-import { TUser } from "../../types/userManagement.type";
-import { verifyToken } from "../../utils/verifyToken";
-
 type SignUpFormData = {
   name: string;
   email: string;
@@ -15,9 +11,7 @@ type SignUpFormData = {
 };
 
 const Signup = () => {
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const location = useLocation(); 
+  const navigate = useNavigate(); 
   const { register, handleSubmit } = useForm<SignUpFormData>();
   const [signUp] = useSignUpMutation();
 

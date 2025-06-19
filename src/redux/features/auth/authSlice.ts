@@ -4,9 +4,10 @@ import { RootState } from "../../store";
 import { JwtPayload } from "jsonwebtoken";  // Ensure you import this
 
 export interface TUser extends JwtPayload {
-  id: string;
-  email: string;
-  role: "admin" | "user";  
+    _id: string;
+    name: string;
+    email: string;
+    role: "admin" | "user";
 }
  
 type TAuthState = {

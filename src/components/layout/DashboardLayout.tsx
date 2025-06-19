@@ -18,11 +18,10 @@ const MainLayout = () => {
   let user = null;
 
   if (token) {
-    user = verifyToken(token); // Ensure `verifyToken` returns a user object with `role`
+    user = verifyToken(token); 
   }
 
-  // If no token or user, redirect to login
-  if (!user) {
+    if (!user) {
     return <Navigate to="/login" />;
   }
 
