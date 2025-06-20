@@ -32,13 +32,12 @@ const MainLayout = () => {
 
   return (
     <div className="flex min-h-screen w-full bg-gray-100 overflow-hidden">
-      {/* Sidebar */}
+     
       <div className="f0 min-h-screen">
-        {/* Sidebar Routes based on Role */}
+        
         {user?.role === userRole.Admin ? <AdminRoutes /> : <UserRoutes />}
       </div>
-
-      {/* Main Content Section */}
+     
       <div className="flex-1 flex flex-col min-h-screen overflow-auto">
         {/* Header */}
         <header className="bg-white shadow p-4">
