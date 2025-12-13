@@ -8,9 +8,9 @@ const HomePage = () => {
   return (
     <div>
       <Banner />
-      <OneRide />
       <BicycleCard />
       <DiscountCard />
+      <OneRide />
       <Testimonials />
     </div>
   );

@@ -1,3 +1,4 @@
+import React from "react";
 import { Carousel } from "primereact/carousel";
 
 const banners = [
@@ -16,74 +17,96 @@ const Banner = () => {
 
   const bannerTemplate = (banner: string) => {
     return (
-      <div className="md:grid grid-cols-1 md:grid-cols-2 items-center justify-between gap-10 w-full px-6 py-12 lg:px-20 bg-gray-100">
-        {/* Left Content */}
-        <div className="text-center md:text-left space-y-8">
-          <h1 className="text-green-600 text-4xl md:text-6xl font-black tracking-tight">
-            ByCicle Store...
-          </h1>
-
-          <p className="text-gray-700 text-sm md:text-lg leading-relaxed max-w-xl mx-auto md:mx-0">
-            Welcome to ByCicle Store — your one-stop shop for all things cycling!
-            Whether you're a casual rider, a dedicated enthusiast, or a competitive athlete,
-            we fuel your passion for cycling with the best electric bikes in the market.
-          </p>
-
-          {/* Buttons */}
-          <div className="flex flex-col sm:flex-row gap-5 justify-center md:justify-start">
-            <button className="bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-10 rounded-xl shadow-xl transition transform hover:scale-105">
-              Shop Now
-            </button>
-            <button className="bg-red-600 hover:bg-red-700 text-white font-bold py-4 px-10 rounded-xl shadow-xl transition transform hover:scale-105">
-              200% Off Sale!
-            </button>
-          </div>
-
-          {/* Stats Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-12 text-black">
-            <div className="text-center">
-              <h3 className="text-3xl md:text-4xl font-black">39</h3>
-              <p className="text-gray-600 text-sm uppercase tracking-wider">Km/hr Top Speed</p>
-            </div>
-            <div className="text-center">
-              <h3 className="text-3xl md:text-4xl font-black">90</h3>
-              <p className="text-gray-600 text-sm uppercase tracking-wider">Km Range</p>
-            </div>
-            <div className="text-center">
-              <h3 className="text-3xl md:text-4xl font-black">2.5</h3>
-              <p className="text-gray-600 text-sm uppercase tracking-wider">Hours Charge</p>
-            </div>
-            <div className="text-center">
-              <h3 className="text-3xl md:text-4xl font-black">15</h3>
-              <p className="text-gray-600 text-sm uppercase tracking-wider">Kg Weight</p>
-            </div>
-          </div>
+      <div className="relative min-h-screen flex items-center justify-center overflow-hidden bg-white">
+        {/* Animated Background Orbs - Digital Fashion Depth */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-10 -left-40 w-96 h-96 bg-red-500/10 rounded-full filter blur-3xl animate-pulse" />
+          <div className="absolute bottom-20 -right-40 w-96 h-96 bg-green-500/10 rounded-full filter blur-3xl animate-pulse delay-700" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-black/5 rounded-full filter blur-3xl animate-ping slow" />
         </div>
 
-        {/* Right Image */}
-        <div className="flex justify-center items-center mt-10 md:mt-0">
-          <img
-            src={banner}
-            alt="Electric Bicycle"
-            className="w-full max-w-md lg:max-w-2xl object-contain drop-shadow-2xl"
-          />
+        <div className="relative max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-1 lg:grid-cols-2 items-center gap-16">
+          {/* Left: High-Fashion Editorial Content */}
+          <div className="space-y-12 text-center lg:text-left">
+            {/* Headline with Digital Glitch-style Animation */}
+            <div className="overflow-hidden">
+              <h1 className="text-6xl md:text-7xl lg:text-8xl font-black tracking-tighter text-black leading-none">
+                <span className="inline-block animate-fade-up">BYCICLE</span>
+                <br />
+                <span className="inline-block text-red-600 animate-fade-up animation-delay-200">STUDIO</span>
+              </h1>
+            </div>
+
+            <p className="text-lg md:text-xl text-gray-700 font-light tracking-wide max-w-lg mx-auto lg:mx-0">
+              Limited-edition urban machines. Designed for the bold. Engineered for the future.
+            </p>
+
+            {/* Luxury CTA Buttons */}
+            <div className="flex flex-col sm:flex-row gap-6 justify-center lg:justify-start">
+              <button className="group relative px-12 py-5 bg-black text-white font-bold text-lg uppercase tracking-widest rounded-full overflow-hidden transition-all duration-500 hover:shadow-2xl hover:shadow-black/30">
+                <span className="relative z-10">Discover Now</span>
+                <span className="absolute inset-0 bg-gradient-to-r from-red-600 to-green-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              </button>
+
+              <button className="px-12 py-5 border-2 border-black text-black font-bold text-lg uppercase tracking-widest rounded-full hover:bg-black hover:text-white transition-all duration-500">
+                Exclusive Drop
+              </button>
+            </div>
+
+            {/* Minimal Stats - Editorial Style */}
+            <div className="grid grid-cols-4 gap-8 pt-12 border-t border-gray-300">
+              {[
+                { value: "39", label: "Top Speed" },
+                { value: "90", label: "Range" },
+                { value: "2.5", label: "Charge" },
+                { value: "15", label: "Weight" },
+              ].map((stat, i) => (
+                <div key={i} className="text-center">
+                  <h3 className="text-4xl font-black text-black">{stat.value}</h3>
+                  <p className="text-xs uppercase tracking-widest text-gray-600 mt-2">{stat.label}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Right: Dramatic Floating Product */}
+          <div className="relative flex justify-center items-center">
+            <div className="relative group">
+              {/* Floating Shadow */}
+              <div className="absolute inset-0 bg-black/20 rounded-full blur-3xl scale-75 group-hover:scale-90 transition-transform duration-1000" />
+
+              <img
+                src={banner}
+                alt="Exclusive Bicycle"
+                className="relative z-10 w-full max-w-xl lg:max-w-3xl object-contain drop-shadow-2xl 
+                           transition-all duration-1000 
+                           group-hover:scale-110 group-hover:-rotate-3"
+                loading="lazy"
+              />
+
+              {/* Subtle Red/Green Accent Rings */}
+              <div className="absolute -inset-10 border-4 border-red-500/20 rounded-full animate-ping" />
+              <div className="absolute -inset-20 border-4 border-green-500/20 rounded-full animate-ping delay-500" />
+            </div>
+          </div>
         </div>
       </div>
     );
   };
 
   return (
-    <div className="w-full bg-gray-50">
+    <div className="w-full">
       <Carousel
         value={banners}
         numVisible={1}
         numScroll={1}
         responsiveOptions={responsiveOptions}
         circular
-        autoplayInterval={3000}
+        autoplayInterval={5000}
         itemTemplate={bannerTemplate}
-        className="custom-carousel"
-        showIndicators={true}
+        showIndicators={false}
+        showNavigators={false}
+        className="overflow-hidden"
       />
     </div>
   );

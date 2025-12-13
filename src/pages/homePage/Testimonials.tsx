@@ -38,6 +38,13 @@ const testimonials = [
     review:
       "A fantastic bicycle! The design is modern, and the ride is effortless. The suspension makes rough roads feel smooth. It’s perfect for both casual and serious riders. I feel so much healthier now that I ride every day!",
   },
+  {
+    name: "David Lee",
+    image: "https://randomuser.me/api/portraits/men/32.jpg",
+    stars: 5,
+    review:
+      "Excellent quality and performance! This bike has transformed my daily commute. Super comfortable, fast, and looks amazing. Best decision ever!",
+  },
 ];
 
 const Testimonials = () => {
@@ -45,37 +52,65 @@ const Testimonials = () => {
     dots: true,
     infinite: true,
     speed: 600,
-    slidesToShow: 1,
-    slidesToScroll: 1,
     autoplay: true,
-    autoplaySpeed: 2000,
+    autoplaySpeed: 4000,
     arrows: false,
+    slidesToShow: 3,
+    slidesToScroll: 1,
+    responsive: [
+      {
+        breakpoint: 1024, // lg
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 640, // sm
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
   };
 
   return (
-    <div className="max-w-4xl mx-auto text-black p-8">
-      <h2 className="text-3xl font-bold text-center my-10">
-        Customer Testimonials
-      </h2>
+    <section className="w-full bg-gray-100 py-16 px-4">
+      <div className="max-w-7xl mx-auto">
+        <h2 className="text-4xl md:text-5xl font-bold text-center text-gray-800 mb-12">
+          What Our Customers Say
+        </h2>
 
-      <Slider {...settings}>
-        {testimonials.map((testimonial, index) => (
-          <div
-            key={index}
-            className="bg-gray-800 p-16 rounded-lg text-center shadow-lg"
-          >
-            <img
-              src={testimonial.image}
-              alt={testimonial.name}
-              className="w-16 h-16 rounded-full mx-auto mb-4 border-2 border-gray-400"
-            />
-            <h3 className="text-xl font-semibold">{testimonial.name}</h3>
-            <p className="text-yellow-400">{"⭐".repeat(testimonial.stars)}</p>
-            <p className="text-gray-300 mt-2">"{testimonial.review}"</p>
-          </div>
-        ))}
-      </Slider>
-    </div>
+        <Slider {...settings}>
+          {testimonials.map((testimonial, index) => (
+            <div key={index} className="px-4">
+              <div className="bg-white rounded-2xl shadow-xl p-8 h-full flex flex-col justify-between transform transition-all duration-300 hover:scale-105 hover:shadow-2xl">
+                {/* Customer Image & Name */}
+                <div className="text-center">
+                  <img
+                    src={testimonial.image}
+                    alt={testimonial.name}
+                    className="w-20 h-20 rounded-full mx-auto mb-4 object-cover border-4 border-green-500 shadow-md"
+                  />
+                  <h3 className="text-xl font-bold text-gray-800">
+                    {testimonial.name}
+                  </h3>
+                  <div className="text-yellow-500 text-2xl my-3">
+                    {"⭐".repeat(testimonial.stars)}
+                  </div>
+                </div>
+
+                {/* Review Text */}
+                <p className="text-gray-600 text-base leading-relaxed mt-4 italic text-center">
+                  "{testimonial.review}"
+                </p>
+              </div>
+            </div>
+          ))}
+        </Slider>
+      </div>
+    </section>
   );
 };
 

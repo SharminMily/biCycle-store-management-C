@@ -6,17 +6,14 @@ import { TProduct } from "../../types/product.type";
 const AllBicycles = () => {
   const [filters, setFilters] = useState({
     search: "",
-    brand: "",
     type: "",
     minPrice: "",
     maxPrice: "",
-    model: "",
     available: "",
   });
 
   const navigate = useNavigate();
   const { data: products, isFetching } = useGetProductsQuery(filters);
-
   const [bicycles, setBicycles] = useState<TProduct[]>([]);
 
   useEffect(() => {
@@ -25,115 +22,152 @@ const AllBicycles = () => {
     }
   }, [products]);
 
+  const priceRanges = [
+    { label: "All Prices", min: "", max: "" },
+    { label: "Under $500", min: "0", max: "500" },
+    { label: "$500 – $2,000", min: "500", max: "2000" },
+    { label: "$2,000+", min: "2000", max: "999999" },
+  ];
+
   return (
-    <div>
-      <h1 className="text-4xl text-black text-center pb-8 font-semibold">
-        Featured Bicycles
-      </h1>
+    <div className="min-h-screen bg-white">
+      {/* Hero Section */}
+      <header className="py-16 md:py-24 px-6 text-center">
+        <h1 className="text-4xl md:text-6xl lg:text-7xl font-extralight tracking-widest text-gray-900">
+          THE COLLECTION
+        </h1>
+        <p className="mt-4 text-base md:text-lg lg:text-xl text-gray-500 font-light max-w-xl mx-auto">
+          Curated rides for the modern cyclist
+        </p>
+      </header>
 
-      {/* 🔹 Filter Section */}
-      <div className="text-black flex flex-wrap justify-center gap-6 pb-6">
-        {/* 🔍 Search */}
-        <input
-          type="text"
-          placeholder="Search by name, brand, or category"
-          value={filters.search}
-          onChange={(e) => setFilters({ ...filters, search: e.target.value })}
-          className="p-2 border border-gray-300 rounded-md text-black"
-        />
+      {/* Responsive Filter Pills */}
+      <div className="max-w-7xl mx-auto px-6 mb-10 md:mb-16">
+        <div className="flex flex-wrap justify-center gap-3 md:gap-4">
+          {["All", "Mountain", "Road", "Electric", "Hybrid"].map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setFilters({ ...filters, type: cat === "All" ? "" : cat })}
+              className={`px-5 md:px-8 py-2.5 md:py-3 rounded-full text-sm md:text-base font-medium transition-all duration-300
+                ${filters.type === (cat === "All" ? "" : cat)
+                  ? "bg-gray-900 text-white shadow-md"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                }`}
+            >
+              {cat}
+            </button>
+          ))}
 
-        {/* 💰 Price Filter */}
-        <select
-          value={filters.minPrice + "-" + filters.maxPrice} // Combine values
-          onChange={(e) => {
-            const [min, max] = e.target.value.split("-");
-            setFilters({ ...filters, minPrice: min, maxPrice: max });
-          }}
-          className="p-2 border border-gray-300 rounded-md text-black bg-black"
-        >
-          <option value="">Select Price Range</option>
-          <option value="0-500">Under $500</option>
-          <option value="500-1000">$500 - $5000</option>
-          <option value="5000-10000">$5000 - $10,000</option>
-        </select>
+          {priceRanges.map(({ label, min, max }) => (
+            <button
+              key={label}
+              onClick={() => setFilters({ ...filters, minPrice: min, maxPrice: max })}
+              className={`px-5 md:px-8 py-2.5 md:py-3 rounded-full text-sm md:text-base font-medium transition-all duration-300
+                ${filters.minPrice === min && filters.maxPrice === max
+                  ? "bg-gray-900 text-white shadow-md"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                }`}
+            >
+              {label}
+            </button>
+          ))}
 
-        {/* 📌 Category */}
-        <select
-          value={filters.type}
-          onChange={(e) =>
-            setFilters({
-              ...filters,
-              type: e.target.value,
-            })
-          }
-          className="p-2 border border-gray-300 rounded-md text-black bg-black"
-        >
-          <option value="">All Categories</option>
-          <option value="Mountain">Mountain</option>
-          <option value="Road">Road</option>
-          <option value="Electric">Electric</option>
-        </select>
+          <button
+            onClick={() => setFilters({ ...filters, available: filters.available ? "" : "true" })}
+            className={`px-5 md:px-8 py-2.5 md:py-3 rounded-full text-sm md:text-base font-medium transition-all duration-300
+              ${filters.available ? "bg-emerald-600 text-white shadow-md" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}
+            `}
+          >
+            In Stock Only
+          </button>
 
-        {/* ✅ Availability */}
-        <select
-          value={filters.available}
-          onChange={(e) =>
-            setFilters({ ...filters, available: e.target.value })
-          }
-          className="p-2 border border-gray-300 rounded-md text-black bg-black"
-        >
-          <option value="">All</option>
-          <option value="true">In Stock</option>
-          <option value="false">Out of Stock</option>
-        </select>
+          <input
+            type="text"
+            placeholder="Search..."
+            value={filters.search}
+            onChange={(e) => setFilters({ ...filters, search: e.target.value })}
+            className="px-5 md:px-8 py-2.5 md:py-3 rounded-full bg-gray-100 text-sm md:text-base placeholder-gray-500 focus:outline-none focus:ring-4 focus:ring-gray-300 w-full max-w-xs"
+          />
+        </div>
       </div>
 
-      {/* ⏳ Loading */}
-      {isFetching ? (
-        <p className="text-center text-black">Loading...</p>
-      ) : (
-        <div className="flex justify-center items-center">
-          <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4 md:m-6 m-10">
-            {bicycles.length === 0 ? (
-              <p className="text-center text-black">No products found.</p>
-            ) : (
-              bicycles.map(
-                ({ _id, name, brand, price, quantity, image, type }) => (
-                  <div
-                    key={_id}
-                    className="relative p-2 border border-gray-400 w-full max-w-sm text-black rounded-lg shadow-lg overflow-hidden"
-                  >
-                    <div className="relative">
-                      <img
-                        src={image}
-                        alt={name}
-                        className="w-full h-56 object-cover p-2"
-                      />
-                      <div className="absolute top-2 left-2 bg-white text-black font-bold text-lg px-3 py-1 rounded-full">
-                        ${price}
-                      </div>
-                    </div>
-                    <div className="p-4">
-                      <h3 className="text-xl font-bold">{name}</h3>
-                      <p className="text-gray-300 text-sm">Brand: {brand}</p>
-                      <p className="text-gray-300 text-sm">Category: {type}</p>
-                      <p className="text-green-500 mt-2">
-                        {quantity > 0 ? `Stock: ${quantity}` : "Out of Stock"}
-                      </p>
-                      <button
-                        onClick={() => navigate(`/bicycles-details/${_id}`)}
-                        className="px-4 border border-gray-500 py-2 text-[12px] text-black rounded-lg hover:bg-blue-700 bg-gradient-to-r from-[#a144df] to-[#010113] hover:opacity-90 transition duration-300"
-                      >
-                        View Details
-                      </button>
-                    </div>
-                  </div>
-                )
-              )
-            )}
+      {/* Compact & Responsive Grid */}
+      <div className="max-w-7xl mx-auto px-6 pb-16 md:pb-24">
+        {isFetching ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10">
+            {[...Array(6)].map((_, i) => (
+              <div key={i} className="bg-gray-100 rounded-2xl aspect-[4/3] animate-pulse" />
+            ))}
           </div>
-        </div>
-      )}
+        ) : bicycles.length === 0 ? (
+          <p className="text-center text-lg md:text-xl text-gray-400 py-16 font-light">
+            No bicycles match your selection.
+          </p>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10">
+            {bicycles.map((bike, index) => (
+              <div
+                key={bike._id}
+                className="group cursor-pointer opacity-0 animate-fadeIn"
+                style={{ animationDelay: `${index * 80}ms` }}
+              >
+                <div className="bg-white rounded-2xl shadow-lg overflow-hidden transition-all duration-500 group-hover:shadow-xl group-hover:-translate-y-1.5">
+                  {/* Shorter Image */}
+                  <div className="aspect-[4/3] overflow-hidden bg-gray-50">
+                    <img
+                      src={bike.image}
+                      alt={bike.name}
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      onClick={() => navigate(`/bicycles-details/${bike._id}`)}
+                    />
+                  </div>
+
+                  {/* Compact Content */}
+                  <div className="p-5 md:p-7 space-y-4">
+                    <div onClick={() => navigate(`/bicycles-details/${bike._id}`)}>
+                      <h3 className="text-xl md:text-2xl font-light text-gray-900">
+                        {bike.name}
+                      </h3>
+                      <p className="text-sm md:text-base text-gray-500 mt-1">
+                        {bike.brand} • {bike.type}
+                      </p>
+                    </div>
+
+                    <div className="flex justify-between items-end">
+                      <span className="text-3xl md:text-4xl font-extralight text-gray-900">
+                        ${bike.price}
+                      </span>
+
+                      <span className={`px-4 md:px-5 py-1.5 md:py-2 rounded-full text-xs md:text-sm font-medium
+                        ${bike.quantity > 0 ? "bg-emerald-100 text-emerald-800" : "bg-red-100 text-red-800"}
+                      `}>
+                        {bike.quantity > 0 ? "In Stock" : "Sold Out"}
+                      </span>
+                    </div>
+
+                    {/* View Details Button */}
+                    <button
+                      onClick={() => navigate(`/bicycles-details/${bike._id}`)}
+                      className="w-full py-3 text-center text-base font-medium text-gray-900 bg-transparent border border-gray-900 rounded-full
+                                 hover:bg-gray-900 hover:text-white transition-all duration-400"
+                    >
+                      View Details
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <style jsx>{`
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fadeIn { animation: fadeIn 0.6s ease-out forwards; }
+      `}</style>
     </div>
   );
 };

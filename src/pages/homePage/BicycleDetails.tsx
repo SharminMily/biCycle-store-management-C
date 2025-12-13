@@ -1,95 +1,143 @@
+import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useGetProductsQuery } from "../../redux/features/admin/product/productApi";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../../redux/features/cart/cartSlice";
 import { RootState } from "../../redux/store";
+import { ShoppingBag } from "lucide-react"; // Optional: npm install lucide-react
 
 const BicycleDetails = () => {
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const cartItems = useSelector((state: RootState) => state.cart.items); // ✅ Move useSelector here
+  const cartItems = useSelector((state: RootState) => state.cart.items);
 
   const { data: products, isFetching, error } = useGetProductsQuery(undefined);
 
   if (isFetching) {
-    return <p className="text-center text-black">Loading...</p>;
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-black text-2xl font-light tracking-widest animate-pulse">LOADING EXPERIENCE...</div>
+      </div>
+    );
   }
-  if (error) {
-    return <p className="text-center text-red-500">Failed to load data.</p>;
-  }
-  if (!products?.data || products.data.length === 0) {
-    return <p className="text-center text-red-500">No bicycles available!</p>;
+
+  if (error || !products?.data) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-red-600 text-3xl font-black tracking-widest">ERROR // SYSTEM FAILURE</div>
+      </div>
+    );
   }
 
   const bicycle = products.data.find((bike) => bike._id === id);
   if (!bicycle) {
-    return <p className="text-center text-black">Bicycle not found!</p>;
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-black text-4xl font-black tracking-widest">404 // NOT FOUND</div>
+      </div>
+    );
   }
 
   const handleBuyNow = () => {
-    console.log("Adding to cart:", bicycle);
     dispatch(
       addToCart({
         product: bicycle._id,
         name: bicycle.name,
         brand: bicycle.brand,
-        model: bicycle.model,
+        model: bicycle.model || "",
         price: bicycle.price,
         category: bicycle.type,
         description: bicycle.description,
         image: bicycle.image,
         quantity: 1,
         stock: bicycle.quantity,
-        inStock: bicycle.inStock,
+        inStock: bicycle.inStock || bicycle.quantity > 0,
         id: "",
       })
     );
-
-    console.log("Cart after adding:", cartItems); // ✅ Use the cart state from useSelector
     navigate("/checkout");
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen px-4 py-10">
-      <div className="max-w-4xl w-full bg-gray-800 text-black p-6 rounded-lg shadow-lg">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="flex justify-center">
+    <section className="relative min-h-screen bg-white overflow-hidden text-black">
+      {/* Digital Fashion Ambient Glow - Light Version */}
+      <div className="absolute inset-0 opacity-30 pointer-events-none">
+        <div className="absolute top-20 left-20 w-96 h-96 bg-red-400 rounded-full filter blur-3xl animate-pulse" />
+        <div className="absolute bottom-32 right-20 w-80 h-80 bg-red-300 rounded-full filter blur-3xl animate-pulse delay-1000" />
+      </div>
+
+      <div className="relative max-w-7xl mx-auto px-6 lg:px-12 py-20">
+        <div className="grid lg:grid-cols-2 gap-16 items-center">
+          {/* Image - Couture Spotlight */}
+          <div className="relative group">
+            <div className="absolute inset-0 bg-gradient-to-br from-red-300/30 to-transparent rounded-3xl blur-3xl group-hover:blur-xl transition-all duration-700" />
             <img
               src={bicycle.image}
               alt={bicycle.name}
-              className="w-full h-64 object-cover rounded-lg"
+              className="relative w-full object-contain rounded-3xl shadow-2xl transition-all duration-1000 group-hover:scale-105 group-hover:rotate-2"
+              loading="lazy"
             />
+            {/* Floating Status Orb */}
+            <div className="absolute top-8 right-8">
+              <div className={`w-6 h-6 rounded-full animate-ping ${bicycle.quantity > 0 ? "bg-black" : "bg-red-600"}`} />
+              <div className={`absolute top-0 left-0 w-6 h-6 rounded-full ${bicycle.quantity > 0 ? "bg-black" : "bg-red-600"}`} />
+            </div>
           </div>
-          <div className="flex flex-col justify-center">
-            <h2 className="text-3xl font-bold">{bicycle.name}</h2>
-            <p className="text-gray-200 text-xl mt-2">Brand: {bicycle.brand}</p>
-            <p className="text-gray-200 text-lg mt-2">
-              Category: {bicycle.type}
-            </p>
-            <p className="text-gray-400 mt-2">{bicycle.description}</p>
-            <p className="text-gray-300 mt-1">
-              Price: <span className="font-bold">${bicycle.price}</span>
-            </p>
-            <p
-              className={`mt-2 ${
-                bicycle.quantity > 0 ? "text-green-400" : "text-red-400"
-              }`}
-            >
-              {bicycle.quantity > 0
-                ? `Stock: ${bicycle.quantity}`
-                : "Out of Stock"}
-            </p>
+
+          {/* Details - High Fashion Editorial */}
+          <div className="space-y-12">
+            <div>
+              <h1 className="text-6xl md:text-7xl lg:text-8xl font-black tracking-[-0.05em] text-black">
+                {bicycle.name.toUpperCase()}
+              </h1>
+              <p className="mt-4 text-2xl font-light tracking-widest text-gray-600">
+                {bicycle.brand} • {bicycle.type}
+              </p>
+            </div>
+
+            <div className="space-y-6">
+              <p className="text-xl text-gray-700 font-light leading-relaxed max-w-2xl">
+                {bicycle.description}
+              </p>
+
+              {/* Price - Luxury Tag */}
+              <div className="flex items-center gap-6">
+                <div className="bg-black text-white font-black text-5xl px-10 py-4 rounded-full shadow-2xl border-4 border-black">
+                  ${bicycle.price}
+                </div>
+                <div className={`text-2xl font-light ${bicycle.quantity > 0 ? "text-gray-600" : "text-red-600"}`}>
+                  {bicycle.quantity > 0 ? `LIMITED STOCK • ${bicycle.quantity} LEFT` : "SOLD OUT"}
+                </div>
+              </div>
+            </div>
+
+            {/* Acquire Button - Exclusive Drop Style */}
             <button
               onClick={handleBuyNow}
-              className="mt-4 px-2 w-full border border-gray-500 py-3 text-[12px] text-black rounded-lg hover:bg-blue-700 bg-gradient-to-r from-[#a144df] to-[#010113] hover:opacity-90 transition duration-300"
+              disabled={bicycle.quantity === 0}
+              className={`group relative w-full md:w-auto inline-flex items-center justify-center gap-6 py-6 px-16 bg-black text-white font-black text-2xl uppercase tracking-widest rounded-full overflow-hidden shadow-2xl transition-all duration-700
+                ${bicycle.quantity === 0 ? "bg-gray-400 cursor-not-allowed opacity-60" : "hover:shadow-black/30 hover:scale-105"}`}
             >
-              Buy Now
+              <ShoppingBag className="w-8 h-8" />
+              <span className="relative z-10">
+                {bicycle.quantity > 0 ? "Acquire Now" : "Unavailable"}
+              </span>
+              <span className="absolute inset-0 bg-red-600 opacity-0 group-hover:opacity-20 transition-opacity duration-500" />
+              <span className="relative z-10 group-hover:translate-x-4 transition-transform duration-500">→</span>
+            </button>
+
+            {/* Subtle Back Link */}
+            <button
+              onClick={() => navigate(-1)}
+              className="text-gray-500 hover:text-black transition-colors duration-300 uppercase tracking-widest text-sm"
+            >
+              ← Return to Collection
             </button>
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 
