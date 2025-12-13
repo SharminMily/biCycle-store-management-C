@@ -1,1 +1,13 @@
 @import "tailwindcss";
+/* Custom styles for PrimeReact Carousel indicators */
+.custom-carousel .p-carousel-indicators .p-carousel-indicator.p-highlight button {
+  background-color: #ee0b16 !important; /* Sky blue for the active indicator bar */
+}
+
+.custom-carousel .p-carousel-indicators .p-carousel-indicator button {
+  background-color: #e5e7eb !important; /* Optional: lighter gray for inactive dots */
+}
+
+.custom-carousel .p-carousel-indicators .p-carousel-indicator.p-highlight {
+  border-color: #f11a25 !important; /* Optional: if there's a border */
+}

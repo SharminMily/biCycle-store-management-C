@@ -16,57 +16,56 @@ const Banner = () => {
 
   const bannerTemplate = (banner: string) => {
     return (
-      <div className="  md:grid grid-cols-2 justify-center items-center gap-4 w-full lg:p-10 p-4">
-        <div className="text-center md:text-start text-black md:pb-0 pb-10">
-          <h1 className="text-green-500 md:text-5xl  md:font-bold text-3xl pb-2">
-            ByCicle store...
+      <div className="md:grid grid-cols-1 md:grid-cols-2 items-center justify-between gap-10 w-full px-6 py-12 lg:px-20 bg-gray-100">
+        {/* Left Content */}
+        <div className="text-center md:text-left space-y-8">
+          <h1 className="text-green-600 text-4xl md:text-6xl font-black tracking-tight">
+            ByCicle Store...
           </h1>
-          <span className="md:text-sm text-[10px] pb-4">
-            Welcome to ByCicle store, your one-stop shop for all things cycling!
-            Whether you're a casual rider, a dedicated enthusiast, or a
-            competitive athlete, passion for cycling. <br /> Let me know if
-            you'd like to tailor this further!
-          </span>
-          <br />
-          {/*  className="mt-5 border border-gray-400 md:px-4 md:py-2 px-2 text-black font-semibold rounded-lg shadow-lg 
-bg-gradient-to-r from-[#a144df] to-[#010113] hover:opacity-90 transition duration-300" */}
-          <button
-           className="bg-green-600 p-2 text-white"
-          >
-            Shop Now
-          </button>
-          <button
-           className="bg-red-600 p-2 text-white"
-          >
-            200%off
-          </button>
-          <div className="flex justify-center md:justify-start space-x-6 align-middle text-black mt-8">
-            <div>
-              <h1 className="font-bold md:text-2xl">
-                39Km<span className="font-medium text-[10px]">/hr</span>
-              </h1>
-              <p className="text-[10px]">Top Speed</p>
+
+          <p className="text-gray-700 text-sm md:text-lg leading-relaxed max-w-xl mx-auto md:mx-0">
+            Welcome to ByCicle Store — your one-stop shop for all things cycling!
+            Whether you're a casual rider, a dedicated enthusiast, or a competitive athlete,
+            we fuel your passion for cycling with the best electric bikes in the market.
+          </p>
+
+          {/* Buttons */}
+          <div className="flex flex-col sm:flex-row gap-5 justify-center md:justify-start">
+            <button className="bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-10 rounded-xl shadow-xl transition transform hover:scale-105">
+              Shop Now
+            </button>
+            <button className="bg-red-600 hover:bg-red-700 text-white font-bold py-4 px-10 rounded-xl shadow-xl transition transform hover:scale-105">
+              200% Off Sale!
+            </button>
+          </div>
+
+          {/* Stats Grid */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-12 text-black">
+            <div className="text-center">
+              <h3 className="text-3xl md:text-4xl font-black">39</h3>
+              <p className="text-gray-600 text-sm uppercase tracking-wider">Km/hr Top Speed</p>
             </div>
-            <div>
-              <h1 className="font-bold md:text-2xl">90Km </h1>
-              <p className="text-[10px]">Battery Range</p>
+            <div className="text-center">
+              <h3 className="text-3xl md:text-4xl font-black">90</h3>
+              <p className="text-gray-600 text-sm uppercase tracking-wider">Km Range</p>
             </div>
-            <div>
-              <h1 className="font-bold md:text-2xl">2.5h </h1>
-              <p className="text-[10px]">Charging Time</p>
+            <div className="text-center">
+              <h3 className="text-3xl md:text-4xl font-black">2.5</h3>
+              <p className="text-gray-600 text-sm uppercase tracking-wider">Hours Charge</p>
             </div>
-            <div>
-              <h1 className="font-bold md:text-2xl">15Kg </h1>
-              <p className="text-[10px]">weight</p>
+            <div className="text-center">
+              <h3 className="text-3xl md:text-4xl font-black">15</h3>
+              <p className="text-gray-600 text-sm uppercase tracking-wider">Kg Weight</p>
             </div>
           </div>
         </div>
 
-        <div className="w-full h-full flex justify-center items-center">
+        {/* Right Image */}
+        <div className="flex justify-center items-center mt-10 md:mt-0">
           <img
             src={banner}
-            alt="Banner"
-            className="w-full max-w-full sm:h-[300px] md:h-[400px] object-contain rounded-lg shadow-lg"
+            alt="Electric Bicycle"
+            className="w-full max-w-md lg:max-w-2xl object-contain drop-shadow-2xl"
           />
         </div>
       </div>
@@ -74,15 +73,17 @@ bg-gradient-to-r from-[#a144df] to-[#010113] hover:opacity-90 transition duratio
   };
 
   return (
-    <div className="card">
+    <div className="w-full bg-gray-50">
       <Carousel
         value={banners}
         numVisible={1}
         numScroll={1}
         responsiveOptions={responsiveOptions}
         circular
-        autoplayInterval={3000} // Auto change every 3 seconds
+        autoplayInterval={3000}
         itemTemplate={bannerTemplate}
+        className="custom-carousel"
+        showIndicators={true}
       />
     </div>
   );
