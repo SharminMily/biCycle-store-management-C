@@ -16,20 +16,20 @@ const Checkout = () => {
   console.log("Cart data in Checkout:", cartData);
   const [createOrder, { isLoading, isSuccess, data, isError, error }] =
     useCreateOrderMutation();
-    // console.log(createOrder)
-  
+  // console.log(createOrder)
 
   const handlePlaceOrder = async () => {
     try {
       const response = await createOrder({ products: cartData.items }).unwrap();
-      
-      console.log("🟢 Full Order Response:", response); 
-  
+
+      console.log("🟢 Full Order Response:", response);
+
       // Extract checkout URL properly
-      const checkoutUrl = response?.data?.checkout_url || response?.checkout_url;
-      
+      const checkoutUrl =
+        response?.data?.checkout_url || response?.checkout_url;
+
       console.log("🔵 Extracted Checkout URL:", checkoutUrl); // Print extracted URL
-  
+
       if (typeof checkoutUrl === "string" && checkoutUrl.startsWith("http")) {
         console.log("✅ Redirecting to:", checkoutUrl);
         window.location.href = checkoutUrl;
@@ -49,89 +49,84 @@ const Checkout = () => {
     if (data?.data?.checkout_url) {
       console.log("Redirecting to:", data.data.checkout_url); // Log URL
       setTimeout(() => {
-          window.location.href = data.data.checkout_url;
+        window.location.href = data.data.checkout_url;
       }, 1000);
-  } else {
+    } else {
       console.error("checkout_url is missing in API response");
       toast.error("Payment URL not found. Try again.");
-  }
-   
+    }
 
     if (isError) toast.error(JSON.stringify(error), { id: toastId });
   }, [data?.data, data?.message, error, isError, isLoading, isSuccess]);
-  
 
   return (
     <div className="max-w-5xl mx-auto mt-20">
-    
-      <div className="flex-1 p-12 rounded-b-md text-white bg-[#020227] overflow-y-auto">
+      <div className="flex-1 p-12 rounded-b-md text-black bg-[#020227] overflow-y-auto">
         {cartData.items.length > 0 ? (
           <ul className="space-y-4">
             {cartData.items.map((item) => (
-              <li key={item.product} className="flex  justify-between items-center gap-4">
-
-              <div className="flex justify-between items-center gap-40">
-              <div className="">
-               <img
-                  src={item.image}
-                  alt={item.name}
-                  className="h-16 w-16 rounded object-cover"
-                />           
-
-               </div>
-
-                <div className="flex-1">
-                  <h4 className="text-sm font-medium">{item.name}</h4>
-                  
-                  <div className="flex items-center gap-2 mt-1">
-                    <button
-                      onClick={() =>
-                        dispatch(
-                          updateQuantity({
-                            id: item.product,
-                            quantity: Math.max(item.quantity - 1, 1),
-                          })
-                        )
-                      }
-                      className="w-6 h-6 bg-gray-200 text-black rounded hover:bg-gray-300"
-                    >
-                      -
-                    </button>
-                    <span className="text-sm font-medium">{item.quantity}</span>
-                    
-                    <button
-                      onClick={() =>
-                        dispatch(
-                          updateQuantity({
-                            id: item.product,
-                            quantity: Math.min(item.quantity + 1, item.stock),
-                          })
-                        )
-                      }
-                      className="w-6 h-6 bg-gray-200 text-black rounded hover:bg-gray-300"
-                    >
-                      +
-                    </button>
+              <li
+                key={item.product}
+                className="flex  justify-between items-center gap-4"
+              >
+                <div className="flex justify-between items-center gap-40">
+                  <div className="">
+                    <img
+                      src={item.image}
+                      alt={item.name}
+                      className="h-16 w-16 rounded object-cover"
+                    />
                   </div>
 
+                  <div className="flex-1">
+                    <h4 className="text-sm font-medium">{item.name}</h4>
 
+                    <div className="flex items-center gap-2 mt-1">
+                      <button
+                        onClick={() =>
+                          dispatch(
+                            updateQuantity({
+                              id: item.product,
+                              quantity: Math.max(item.quantity - 1, 1),
+                            })
+                          )
+                        }
+                        className="w-6 h-6 bg-gray-200 text-black rounded hover:bg-gray-300"
+                      >
+                        -
+                      </button>
+                      <span className="text-sm font-medium">
+                        {item.quantity}
+                      </span>
+
+                      <button
+                        onClick={() =>
+                          dispatch(
+                            updateQuantity({
+                              id: item.product,
+                              quantity: Math.min(item.quantity + 1, item.stock),
+                            })
+                          )
+                        }
+                        className="w-6 h-6 bg-gray-200 text-black rounded hover:bg-gray-300"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
                 </div>
-              </div>
-
-
 
                 <div className="">
-                <p className="text-sm font-semibold text-white">
-                  ${(item.quantity * item.price).toFixed(2)}
-                </p>
-                <button
-                  onClick={() => dispatch(removeFromCart(item.product))}
-                  className="text-red-600 text-sm hover:underline"
-                >
-                  Remove
-                </button>
+                  <p className="text-sm font-semibold text-black">
+                    ${(item.quantity * item.price).toFixed(2)}
+                  </p>
+                  <button
+                    onClick={() => dispatch(removeFromCart(item.product))}
+                    className="text-red-600 text-sm hover:underline"
+                  >
+                    Remove
+                  </button>
                 </div>
-                
               </li>
             ))}
           </ul>
@@ -142,24 +137,25 @@ const Checkout = () => {
         <div className="border-b my-3"></div>
 
         <div className="flex justify-between items-center mb-4">
-          <span className="text-sm font-medium text-white">
+          <span className="text-sm font-medium text-black">
             Total Quantity:
           </span>
           <span className="text-lg font-bold">{cartData.totalQuantity}</span>
         </div>
         <div className="flex justify-between items-center mb-4">
-          <span className="text-sm font-medium text-white">
-            Total Price:
-          </span>
+          <span className="text-sm font-medium text-black">Total Price:</span>
           <span className="text-lg font-bold">
             ${cartData.totalPrice.toFixed(2)}
           </span>
         </div>
       </div>
-      <Button className="w-full"  onClick={() => { 
-  console.log("Button Clicked!"); // ✅ Debug Click
-  handlePlaceOrder(); 
-}}>
+      <Button
+        className="w-full"
+        onClick={() => {
+          console.log("Button Clicked!"); // ✅ Debug Click
+          handlePlaceOrder();
+        }}
+      >
         Place Order
       </Button>
     </div>
@@ -203,7 +199,7 @@ export default Checkout;
 //   const totalPrice = cart.reduce((total, item) => total + item.price * item.quantity, 0);
 
 //   return (
-//     <div className="p-6 mx-20 bg-gray-900 text-white min-h-screen">
+//     <div className="p-6 mx-20 bg-gray-900 text-black min-h-screen">
 //       <h1 className="text-3xl font-bold mb-4">Checkout</h1>
 
 //       {/* ✅ Show Error if Stock is Exceeded */}

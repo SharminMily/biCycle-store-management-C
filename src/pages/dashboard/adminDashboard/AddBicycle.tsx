@@ -16,7 +16,7 @@ const AddBicycle = () => {
   // Form Submit Handler
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     console.log("Raw Form Data:", data);
-  
+
     const formattedData = {
       name: data.name,
       brand: data.brand,
@@ -27,30 +27,30 @@ const AddBicycle = () => {
       description: data.description,
       inStock: data.inStock ? true : false, // Convert checkbox value properly
     };
-  
+
     console.log("Formatted Data:", formattedData);
-  
+
     const toastId = toast.loading("Creating...");
-  
+
     try {
-      const response = await addProduct(formattedData).unwrap();  // Ensure .unwrap() is correctly used
+      const response = await addProduct(formattedData).unwrap(); // Ensure .unwrap() is correctly used
       console.log("Server Response:", response);
       toast.success("Bicycle added successfully!", { id: toastId });
       reset();
     } catch (error) {
       console.error("Error:", error);
-      toast.error((error as ApiError)?.data?.message || "Failed to add bicycle", { id: toastId });
+      toast.error(
+        (error as ApiError)?.data?.message || "Failed to add bicycle",
+        { id: toastId }
+      );
     }
   };
-  
 
   return (
     <div className="max-w-lg mx-auto mt-10 bg-white p-6 rounded-lg shadow-md">
       <h2 className="text-2xl font-bold text-center mb-6">Add a Bicycle</h2>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-
-        
-      <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-4">
           {/* Brand */}
           <div>
             <label className="block text-gray-700 font-medium">Brand</label>
@@ -65,8 +65,13 @@ const AddBicycle = () => {
           {/* Type - Dropdown */}
           <div>
             <label className="block text-gray-700 font-medium">Type</label>
-            <select {...register("type", { required: true })} className="w-full p-2 border rounded">
-              <option value="" disabled>Select Bicycle Type</option>
+            <select
+              {...register("type", { required: true })}
+              className="w-full p-2 border rounded"
+            >
+              <option value="" disabled>
+                Select Bicycle Type
+              </option>
               <option value="Mountain">Mountain</option>
               <option value="Road">Road</option>
               <option value="Hybrid">Hybrid</option>
@@ -75,7 +80,6 @@ const AddBicycle = () => {
             </select>
           </div>
         </div>
-        
 
         <div className="grid grid-cols-2 gap-4">
           {/* Price */}
@@ -83,7 +87,10 @@ const AddBicycle = () => {
             <label className="block text-gray-700 font-medium">Price ($)</label>
             <input
               type="number"
-              {...register("price", { required: "Price is required", valueAsNumber: true })}
+              {...register("price", {
+                required: "Price is required",
+                valueAsNumber: true,
+              })}
               placeholder="Enter price"
               className="w-full p-2 border rounded"
             />
@@ -102,7 +109,9 @@ const AddBicycle = () => {
         </div>
         {/* Name */}
         <div>
-          <label className="block text-gray-700 font-medium">Bicycle Name</label>
+          <label className="block text-gray-700 font-medium">
+            Bicycle Name
+          </label>
           <input
             type="text"
             {...register("name", { required: "Name is required" })}
@@ -111,14 +120,12 @@ const AddBicycle = () => {
           />
         </div>
         <label className="block text-gray-700 font-medium">Bicycle image</label>
-          <input
-            type="text"
-            {...register("image", { required: "Image is required" })}
-            placeholder="Enter bicycle image Link"
-            className="w-full p-2 border rounded"
-          />
-
-        
+        <input
+          type="text"
+          {...register("image", { required: "Image is required" })}
+          placeholder="Enter bicycle image Link"
+          className="w-full p-2 border rounded"
+        />
 
         {/* Description */}
         <div>
@@ -139,7 +146,7 @@ const AddBicycle = () => {
         {/* Submit Button */}
         <button
           type="submit"
-          className="w-full py-3 text-white border border-gray-500 rounded-lg hover:bg-blue-700 bg-gradient-to-r from-[#a144df] to-[#010113] hover:opacity-90 transition duration-300"
+          className="w-full py-3 text-black border border-gray-500 rounded-lg hover:bg-blue-700 bg-gradient-to-r from-[#a144df] to-[#010113] hover:opacity-90 transition duration-300"
         >
           Add Bicycle
         </button>

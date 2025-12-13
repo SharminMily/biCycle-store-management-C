@@ -2,12 +2,12 @@ const DiscountCard = () => {
   return (
     <div className="flex justify-center items-center">
       <div className="">
-        <h1 className="text-4xl text-white text-center py-12 font-semibold">
-          Discount price Bycicle{" "}
+        <h1 className="text-4xl text-black text-center py-12 font-semibold">
+          Discount price Bicycle{" "}
         </h1>
 
         <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-6 md:m-4 m-0">
-          <div className="relative border border-gray-400 w-full max-w-sm text-white rounded-lg shadow-lg overflow-hidden">
+          <div className="relative border border-gray-400 w-full max-w-sm text-black rounded-lg shadow-lg overflow-hidden">
             {/* Image with Discount Badge & Price */}
             <div className="relative">
               <img
@@ -16,11 +16,11 @@ const DiscountCard = () => {
                 className="w-full h-56 object-cover  p-2"
               />
               {/* Discount Badge - Top Left */}
-              <div className="absolute top-2 left-2 bg-red-500 text-white text-sm px-3 py-1 rounded-full">
+              <div className="absolute top-2 left-2 bg-red-500 text-black text-sm px-3 py-1 rounded-full">
                 20% OFF
               </div>
               {/* Price - Top Right */}
-              <div className="absolute top-2 right-2 bg-green-600 text-xl text-white px-3 py-0 rounded-full">
+              <div className="absolute top-2 right-2 bg-green-600 text-xl text-black px-3 py-0 rounded-full">
                 $120
               </div>
             </div>
@@ -33,14 +33,14 @@ const DiscountCard = () => {
                 Exercitationem incidunt harum facilis error at reiciendis.
               </p>
               <div className="mt-4">
-                <button className="px-4 w-full border border-gray-500 py-2 text-[12px] text-white rounded-lg hover:bg-blue-700 bg-gradient-to-r from-[#a144df] to-[#010113] hover:opacity-90 transition duration-300">
+                <button className="px-4 w-full border border-gray-500 py-2 text-[12px] text-black rounded-lg hover:bg-blue-700 bg-gradient-to-r from-[#a144df] to-[#010113] hover:opacity-90 transition duration-300">
                   Buy Now
                 </button>
               </div>
             </div>
           </div>
 
-          <div className="relative border border-gray-400 w-full max-w-sm text-white rounded-lg shadow-lg overflow-hidden">
+          <div className="relative border border-gray-400 w-full max-w-sm text-black rounded-lg shadow-lg overflow-hidden">
             {/* Image with Discount Badge & Price */}
             <div className="relative">
               <img
@@ -49,11 +49,11 @@ const DiscountCard = () => {
                 className="w-full h-56 object-cover p-2"
               />
               {/* Discount Badge - Top Left */}
-              <div className="absolute top-2 left-2 bg-red-500 text-white text-sm px-3 py-1 rounded-full">
+              <div className="absolute top-2 left-2 bg-red-500 text-black text-sm px-3 py-1 rounded-full">
                 20% OFF
               </div>
               {/* Price - Top Right */}
-              <div className="absolute top-2 right-2 bg-green-600 text-xl text-white px-3 py-0 rounded-full">
+              <div className="absolute top-2 right-2 bg-green-600 text-xl text-black px-3 py-0 rounded-full">
                 $120
               </div>
             </div>
@@ -66,14 +66,14 @@ const DiscountCard = () => {
                 Exercitationem incidunt harum facilis error at reiciendis.
               </p>
               <div className="mt-4">
-                <button className="px-4 w-full border border-gray-500 py-2 text-[12px] text-white rounded-lg hover:bg-blue-700 bg-gradient-to-r from-[#a144df] to-[#010113] hover:opacity-90 transition duration-300">
+                <button className="px-4 w-full border border-gray-500 py-2 text-[12px] text-black rounded-lg hover:bg-blue-700 bg-gradient-to-r from-[#a144df] to-[#010113] hover:opacity-90 transition duration-300">
                   Buy Now
                 </button>
               </div>
             </div>
           </div>
 
-          <div className="relative border border-gray-400 w-full max-w-sm text-white rounded-lg shadow-lg overflow-hidden">
+          <div className="relative border border-gray-400 w-full max-w-sm text-black rounded-lg shadow-lg overflow-hidden">
             {/* Image with Discount Badge & Price */}
             <div className="relative">
               <img
@@ -82,11 +82,11 @@ const DiscountCard = () => {
                 className="w-full h-56 object-cover  p-2"
               />
               {/* Discount Badge - Top Left */}
-              <div className="absolute top-2 left-2 bg-red-500 text-white text-sm px-3 py-1 rounded-full">
+              <div className="absolute top-2 left-2 bg-red-500 text-black text-sm px-3 py-1 rounded-full">
                 20% OFF
               </div>
               {/* Price - Top Right */}
-              <div className="absolute top-2 right-2 bg-green-600 text-xl text-white px-3 py-0 rounded-full">
+              <div className="absolute top-2 right-2 bg-green-600 text-xl text-black px-3 py-0 rounded-full">
                 $120
               </div>
             </div>
@@ -99,7 +99,7 @@ const DiscountCard = () => {
                 Exercitationem incidunt harum facilis error at reiciendis.
               </p>
               <div className="mt-4">
-                <button className="px-4 w-full border border-gray-500 py-2 text-[12px] text-white rounded-lg hover:bg-blue-700 bg-gradient-to-r from-[#a144df] to-[#010113] hover:opacity-90 transition duration-300">
+                <button className="px-4 w-full border border-gray-500 py-2 text-[12px] text-black rounded-lg hover:bg-blue-700 bg-gradient-to-r from-[#a144df] to-[#010113] hover:opacity-90 transition duration-300">
                   Buy Now
                 </button>
               </div>

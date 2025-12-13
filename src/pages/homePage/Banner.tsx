@@ -16,9 +16,9 @@ const Banner = () => {
 
   const bannerTemplate = (banner: string) => {
     return (
-      <div className=" md:grid grid-cols-2 justify-center items-center gap-4 w-full lg:p-10 p-4">
-        <div className="text-center md:text-start text-white md:pb-0 pb-10">
-          <h1 className="text-white md:text-5xl  md:font-bold text-3xl pb-2">
+      <div className="  md:grid grid-cols-2 justify-center items-center gap-4 w-full lg:p-10 p-4">
+        <div className="text-center md:text-start text-black md:pb-0 pb-10">
+          <h1 className="text-green-500 md:text-5xl  md:font-bold text-3xl pb-2">
             ByCicle store...
           </h1>
           <span className="md:text-sm text-[10px] pb-4">
@@ -28,13 +28,19 @@ const Banner = () => {
             you'd like to tailor this further!
           </span>
           <br />
+          {/*  className="mt-5 border border-gray-400 md:px-4 md:py-2 px-2 text-black font-semibold rounded-lg shadow-lg 
+bg-gradient-to-r from-[#a144df] to-[#010113] hover:opacity-90 transition duration-300" */}
           <button
-            className="mt-5 border border-gray-400 md:px-4 md:py-2 px-2 text-white font-semibold rounded-lg shadow-lg 
-bg-gradient-to-r from-[#a144df] to-[#010113] hover:opacity-90 transition duration-300"
+           className="bg-green-600 p-2 text-white"
           >
             Shop Now
           </button>
-          <div className="flex justify-center md:justify-start space-x-6 align-middle text-white mt-8">
+          <button
+           className="bg-red-600 p-2 text-white"
+          >
+            200%off
+          </button>
+          <div className="flex justify-center md:justify-start space-x-6 align-middle text-black mt-8">
             <div>
               <h1 className="font-bold md:text-2xl">
                 39Km<span className="font-medium text-[10px]">/hr</span>

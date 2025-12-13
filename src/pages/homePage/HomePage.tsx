@@ -1,18 +1,17 @@
 import Banner from "./Banner";
-import BycicleCard from "./BicycleCard";
+import BicycleCard from "./BicycleCard";
 import DiscountCard from "./DiscountCard";
 import OneRide from "./OneRide";
 import Testimonials from "./Testimonials";
 
 const HomePage = () => {
   return (
-    <div>   
+    <div>
       <Banner />
       <OneRide />
-      <BycicleCard />
-      <DiscountCard /> 
+      <BicycleCard />
+      <DiscountCard />
       <Testimonials />
-    
     </div>
   );
 };

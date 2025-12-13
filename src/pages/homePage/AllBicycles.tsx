@@ -27,19 +27,19 @@ const AllBicycles = () => {
 
   return (
     <div>
-      <h1 className="text-4xl text-white text-center pb-8 font-semibold">
+      <h1 className="text-4xl text-black text-center pb-8 font-semibold">
         Featured Bicycles
       </h1>
 
       {/* 🔹 Filter Section */}
-      <div className="text-white flex flex-wrap justify-center gap-6 pb-6">
+      <div className="text-black flex flex-wrap justify-center gap-6 pb-6">
         {/* 🔍 Search */}
         <input
           type="text"
           placeholder="Search by name, brand, or category"
           value={filters.search}
           onChange={(e) => setFilters({ ...filters, search: e.target.value })}
-          className="p-2 border border-gray-300 rounded-md text-white"
+          className="p-2 border border-gray-300 rounded-md text-black"
         />
 
         {/* 💰 Price Filter */}
@@ -49,7 +49,7 @@ const AllBicycles = () => {
             const [min, max] = e.target.value.split("-");
             setFilters({ ...filters, minPrice: min, maxPrice: max });
           }}
-          className="p-2 border border-gray-300 rounded-md text-white bg-black"
+          className="p-2 border border-gray-300 rounded-md text-black bg-black"
         >
           <option value="">Select Price Range</option>
           <option value="0-500">Under $500</option>
@@ -63,10 +63,10 @@ const AllBicycles = () => {
           onChange={(e) =>
             setFilters({
               ...filters,
-              type: e.target.value,             
+              type: e.target.value,
             })
           }
-          className="p-2 border border-gray-300 rounded-md text-white bg-black"
+          className="p-2 border border-gray-300 rounded-md text-black bg-black"
         >
           <option value="">All Categories</option>
           <option value="Mountain">Mountain</option>
@@ -80,7 +80,7 @@ const AllBicycles = () => {
           onChange={(e) =>
             setFilters({ ...filters, available: e.target.value })
           }
-          className="p-2 border border-gray-300 rounded-md text-white bg-black"
+          className="p-2 border border-gray-300 rounded-md text-black bg-black"
         >
           <option value="">All</option>
           <option value="true">In Stock</option>
@@ -90,18 +90,18 @@ const AllBicycles = () => {
 
       {/* ⏳ Loading */}
       {isFetching ? (
-        <p className="text-center text-white">Loading...</p>
+        <p className="text-center text-black">Loading...</p>
       ) : (
         <div className="flex justify-center items-center">
           <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4 md:m-6 m-10">
             {bicycles.length === 0 ? (
-              <p className="text-center text-white">No products found.</p>
+              <p className="text-center text-black">No products found.</p>
             ) : (
               bicycles.map(
                 ({ _id, name, brand, price, quantity, image, type }) => (
                   <div
                     key={_id}
-                    className="relative p-2 border border-gray-400 w-full max-w-sm text-white rounded-lg shadow-lg overflow-hidden"
+                    className="relative p-2 border border-gray-400 w-full max-w-sm text-black rounded-lg shadow-lg overflow-hidden"
                   >
                     <div className="relative">
                       <img
@@ -122,7 +122,7 @@ const AllBicycles = () => {
                       </p>
                       <button
                         onClick={() => navigate(`/bicycles-details/${_id}`)}
-                        className="px-4 border border-gray-500 py-2 text-[12px] text-white rounded-lg hover:bg-blue-700 bg-gradient-to-r from-[#a144df] to-[#010113] hover:opacity-90 transition duration-300"
+                        className="px-4 border border-gray-500 py-2 text-[12px] text-black rounded-lg hover:bg-blue-700 bg-gradient-to-r from-[#a144df] to-[#010113] hover:opacity-90 transition duration-300"
                       >
                         View Details
                       </button>

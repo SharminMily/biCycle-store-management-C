@@ -9,7 +9,7 @@ const ErrorPage = () => {
         <div className="flex justify-center mt-4">
           <Link to="/" className="text-center">
             <button
-              className="font-bold text-center bg-slate-300  px-6 py-2 rounded-full shadow-lg  border border-gray-400 text-white
+              className="font-bold text-center bg-slate-300  px-6 py-2 rounded-full shadow-lg  border border-gray-400 text-black
 bg-gradient-to-r from-[#a144df] to-[#010113] hover:opacity-90 transition duration-300"
             >
               Go To Home

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { toast } from "sonner";
-import { useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { FieldValues, useForm } from "react-hook-form";
 import { useSignUpMutation } from "../../redux/features/auth/authApi";
 type SignUpFormData = {
@@ -11,13 +11,13 @@ type SignUpFormData = {
 };
 
 const Signup = () => {
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
   const { register, handleSubmit } = useForm<SignUpFormData>();
   const [signUp] = useSignUpMutation();
 
   const onSubmit = async (data: FieldValues) => {
     const toastId = toast.loading("Signing up...");
-  
+
     try {
       const userInfo = {
         name: data.name,
@@ -25,32 +25,29 @@ const Signup = () => {
         password: data.password,
         image: data.image,
       };
-  
+
       const res = await signUp(userInfo).unwrap();
       console.log("res", res);
-  
+
       toast.success("Signup successful! Please login.", { id: toastId });
-  
+
       // Redirect to login page
       navigate("/login");
-  
     } catch (err: any) {
       console.error("Signup Error:", err);
       toast.error("Something went wrong....", { id: toastId });
     }
   };
 
-     // toast.success("Sign up successful!", { id: toastId, duration: 2000 });
+  // toast.success("Sign up successful!", { id: toastId, duration: 2000 });
 
-     
-      // const from = location.state?.from?.pathname || "/dashboard/myHome";
-      // console.log("Navigating to:", from);  
-      // navigate(from);  
-   
+  // const from = location.state?.from?.pathname || "/dashboard/myHome";
+  // console.log("Navigating to:", from);
+  // navigate(from);
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <div className="bg-[#010113] text-white p-8 rounded-lg shadow-xl w-96">
+      <div className="bg-[#010113] text-black p-8 rounded-lg shadow-xl w-96">
         <h2 className="text-2xl font-bold text-center mb-6">Sign Up</h2>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           {/* Name Input */}
@@ -85,7 +82,10 @@ const Signup = () => {
 
           {/* Password Input */}
           <div>
-            <label htmlFor="password" className="block text-gray-100 font-medium">
+            <label
+              htmlFor="password"
+              className="block text-gray-100 font-medium"
+            >
               Password
             </label>
             <input
@@ -116,7 +116,7 @@ const Signup = () => {
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full border border-gray-500 text-white py-2 hover:bg-blue-700 font-semibold rounded-lg shadow-lg bg-gradient-to-r from-[#a144df] to-[#040431] hover:opacity-90 transition duration-300"
+            className="w-full border border-gray-500 text-black py-2 hover:bg-blue-700 font-semibold rounded-lg shadow-lg bg-gradient-to-r from-[#a144df] to-[#040431] hover:opacity-90 transition duration-300"
           >
             Sign Up
           </button>
@@ -135,4 +135,3 @@ const Signup = () => {
 };
 
 export default Signup;
-

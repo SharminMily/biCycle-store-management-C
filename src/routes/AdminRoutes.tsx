@@ -5,7 +5,7 @@ import { Divider } from "primereact/divider";
 const AdminRoutes = () => {
   return (
     <div
-      className={`  bg-gray-900 flex flex-col h-screen min-h-full text-white w-52 m-0 p-5 `}
+      className={`  bg-gray-900 flex flex-col h-screen min-h-full text-black w-52 m-0 p-5 `}
     >
       <div className="flex flex-col justify-center items-center">
         <img
@@ -22,7 +22,7 @@ const AdminRoutes = () => {
           className="flex md:hidden"
           align="center"
         ></Divider>
-        <span className="text-white text-sm font-serif"> Bycicle </span>
+        <span className="text-black text-sm font-serif"> Bicycle </span>
         <Divider
           layout="horizontal"
           className="flex md:hidden"

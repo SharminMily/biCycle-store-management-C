@@ -6,10 +6,17 @@ import { TreeTable, TreeTablePageEvent } from "primereact/treetable";
 import { Column } from "primereact/column";
 import { TreeNode } from "primereact/treenode";
 import { toast } from "sonner";
-import { useDeleteOrderMutation, useGetOrdersQuery } from "../../../redux/features/order/orderApi";
+import {
+  useDeleteOrderMutation,
+  useGetOrdersQuery,
+} from "../../../redux/features/order/orderApi";
 
 const Orders = () => {
-  const { data: responseData, isFetching, refetch } = useGetOrdersQuery(undefined);
+  const {
+    data: responseData,
+    isFetching,
+    refetch,
+  } = useGetOrdersQuery(undefined);
   const orders = responseData?.data || []; // Access orders from the response
   const [deleteOrder] = useDeleteOrderMutation(); // Mutation to delete orders
 
@@ -21,11 +28,13 @@ const Orders = () => {
 
   useEffect(() => {
     if (Array.isArray(orders)) {
-      const tableData: TreeNode[] = orders.map(({ _id, transaction, user, totalPrice, status }) => ({
-        key: _id,
-        data: { transaction, user, totalPrice, status },
-        leaf: true,
-      }));
+      const tableData: TreeNode[] = orders.map(
+        ({ _id, transaction, user, totalPrice, status }) => ({
+          key: _id,
+          data: { transaction, user, totalPrice, status },
+          leaf: true,
+        })
+      );
 
       setTotalRecords(orders.length); // Update total records
       setNodes(tableData.slice(first, first + rows)); // Set table rows for pagination
@@ -71,18 +80,34 @@ const Orders = () => {
             onPage={onPage}
             className="w-full min-w-[600px]"
           >
-            <Column field="transaction.sp_code" header="Transaction Code" className="p-2 md:p-4 text-xs md:text-sm" />
-            <Column field="user" header="User ID" className="p-2 md:p-4 text-xs md:text-sm" />
+            <Column
+              field="transaction.sp_code"
+              header="Transaction Code"
+              className="p-2 md:p-4 text-xs md:text-sm"
+            />
+            <Column
+              field="user"
+              header="User ID"
+              className="p-2 md:p-4 text-xs md:text-sm"
+            />
 
-            <Column field="totalPrice" header="Total Price" className="p-4 md:p-4 text-xs md:text-sm" />
+            <Column
+              field="totalPrice"
+              header="Total Price"
+              className="p-4 md:p-4 text-xs md:text-sm"
+            />
 
-            <Column field="status" header="Status" className="p-2 md:p-4 text-xs md:text-sm" />
+            <Column
+              field="status"
+              header="Status"
+              className="p-2 md:p-4 text-xs md:text-sm"
+            />
 
             <Column
               header="Delete"
               body={(rowData) => (
                 <button
-                  className="p-1 md:p-2 bg-red-500 text-white rounded text-xs md:text-sm"
+                  className="p-1 md:p-2 bg-red-500 text-black rounded text-xs md:text-sm"
                   onClick={() => handleDelete(rowData.key)}
                 >
                   Delete

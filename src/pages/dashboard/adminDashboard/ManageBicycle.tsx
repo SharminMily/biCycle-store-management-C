@@ -11,13 +11,16 @@ import {
   useDeleteProductsMutation,
   useGetProductsQuery,
   useUpdateProductsMutation,
-  
 } from "../../../redux/features/admin/product/productApi";
 
 const ManageBicycle = () => {
-  const { data: products, isFetching, refetch } = useGetProductsQuery(undefined);
+  const {
+    data: products,
+    isFetching,
+    refetch,
+  } = useGetProductsQuery(undefined);
   const [updateProduct] = useUpdateProductsMutation();
- 
+
   const [deleteProduct] = useDeleteProductsMutation();
 
   const [nodes, setNodes] = useState<TreeNode[]>([]);
@@ -29,15 +32,17 @@ const ManageBicycle = () => {
   // Update modal state
   const [updateModalOpen, setUpdateModalOpen] = useState(false);
   const [selectedBicycle, setSelectedBicycle] = useState<any>(null);
-  console.log(selectedBicycle)
+  console.log(selectedBicycle);
 
   useEffect(() => {
     if (products?.data) {
-      const tableData: TreeNode[] = products.data.map(({ _id, name, brand, price, quantity, image }) => ({
-        key: _id,
-        data: { name, brand, price, quantity, image },
-        leaf: true,
-      }));
+      const tableData: TreeNode[] = products.data.map(
+        ({ _id, name, brand, price, quantity, image }) => ({
+          key: _id,
+          data: { name, brand, price, quantity, image },
+          leaf: true,
+        })
+      );
 
       setTotalRecords(products.data.length);
       setNodes(tableData.slice(first, first + rows));
@@ -63,11 +68,14 @@ const ManageBicycle = () => {
     const toastId = toast.loading("Updating...");
 
     try {
-      await updateProduct({ id: selectedBicycle.key, data: { ...selectedBicycle.data } }).unwrap();
+      await updateProduct({
+        id: selectedBicycle.key,
+        data: { ...selectedBicycle.data },
+      }).unwrap();
       toast.success("Bicycle updated successfully!", { id: toastId });
-      refetch()
+      refetch();
       setUpdateModalOpen(false);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       toast.error("Failed to update bicycle", { id: toastId });
     }
@@ -79,8 +87,8 @@ const ManageBicycle = () => {
     try {
       await deleteProduct(id).unwrap();
       toast.success("Bicycle deleted successfully!", { id: toastId });
-      refetch()
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      refetch();
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       toast.error("Failed to delete bicycle", { id: toastId });
     }
@@ -88,15 +96,34 @@ const ManageBicycle = () => {
 
   return (
     <div className="bg-gray-100 p-6">
-      <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">Manage Bicycles</h2>
+      <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">
+        Manage Bicycles
+      </h2>
 
       <div className="flex justify-center items-center">
         <div className="bg-white shadow-lg rounded-lg p-4 w-full max-w-5xl overflow-auto max-h-[calc(100vh-100px)]">
-          <TreeTable value={nodes} loading={loading} paginator rows={rows} first={first} totalRecords={totalRecords} onPage={onPage} className="w-full">
-            <Column field="name" header="Bicycle Name" expander className="p-4"
+          <TreeTable
+            value={nodes}
+            loading={loading}
+            paginator
+            rows={rows}
+            first={first}
+            totalRecords={totalRecords}
+            onPage={onPage}
+            className="w-full"
+          >
+            <Column
+              field="name"
+              header="Bicycle Name"
+              expander
+              className="p-4"
               body={(rowData) => (
                 <div className="flex items-center gap-2">
-                  <img src={rowData.data.image} alt="Bicycle" className="w-12 h-12 object-cover rounded-md" />
+                  <img
+                    src={rowData.data.image}
+                    alt="Bicycle"
+                    className="w-12 h-12 object-cover rounded-md"
+                  />
                   <span>{rowData.data.name}</span>
                 </div>
               )}
@@ -104,17 +131,25 @@ const ManageBicycle = () => {
             <Column field="brand" header="Brand" className="p-4" />
             <Column field="price" header="Price" className="p-4" />
             <Column field="quantity" header="Quantity" className="p-4" />
-            <Column header="Update" 
+            <Column
+              header="Update"
               body={(rowData) => (
-                <button className="p-2 bg-blue-500 text-white rounded" onClick={() => handleUpdateClick(rowData)}>
+                <button
+                  className="p-2 bg-blue-500 text-black rounded"
+                  onClick={() => handleUpdateClick(rowData)}
+                >
                   Update
                 </button>
               )}
               className="p-4"
             />
-            <Column header="Delete" 
+            <Column
+              header="Delete"
               body={(rowData) => (
-                <button className="p-2 bg-red-500 text-white rounded" onClick={() => handleDelete(rowData.key)}>
+                <button
+                  className="p-2 bg-red-500 text-black rounded"
+                  onClick={() => handleDelete(rowData.key)}
+                >
                   Delete
                 </button>
               )}
@@ -125,23 +160,82 @@ const ManageBicycle = () => {
       </div>
 
       {/* Update Modal */}
-      <Dialog header="Update Bicycle" visible={updateModalOpen} style={{ width: "450px" }} onHide={() => setUpdateModalOpen(false)}>
+      <Dialog
+        header="Update Bicycle"
+        visible={updateModalOpen}
+        style={{ width: "450px" }}
+        onHide={() => setUpdateModalOpen(false)}
+      >
         <div className="space-y-4">
           <label className="block font-medium">Bicycle Name</label>
-          <InputText className="w-full p-2 border rounded" value={selectedBicycle?.data.name || ""} onChange={(e) => setSelectedBicycle({ ...selectedBicycle, data: { ...selectedBicycle.data, name: e.target.value } })} />
+          <InputText
+            className="w-full p-2 border rounded"
+            value={selectedBicycle?.data.name || ""}
+            onChange={(e) =>
+              setSelectedBicycle({
+                ...selectedBicycle,
+                data: { ...selectedBicycle.data, name: e.target.value },
+              })
+            }
+          />
 
           <label className="block font-medium">Brand</label>
-          <InputText className="w-full p-2 border rounded" value={selectedBicycle?.data.brand || ""} onChange={(e) => setSelectedBicycle({ ...selectedBicycle, data: { ...selectedBicycle.data, brand: e.target.value } })} />
+          <InputText
+            className="w-full p-2 border rounded"
+            value={selectedBicycle?.data.brand || ""}
+            onChange={(e) =>
+              setSelectedBicycle({
+                ...selectedBicycle,
+                data: { ...selectedBicycle.data, brand: e.target.value },
+              })
+            }
+          />
 
           <label className="block font-medium">Price ($)</label>
-          <InputText type="number" className="w-full p-2 border rounded" value={selectedBicycle?.data.price || ""} onChange={(e) => setSelectedBicycle({ ...selectedBicycle, data: { ...selectedBicycle.data, price: Number(e.target.value) } })} />
+          <InputText
+            type="number"
+            className="w-full p-2 border rounded"
+            value={selectedBicycle?.data.price || ""}
+            onChange={(e) =>
+              setSelectedBicycle({
+                ...selectedBicycle,
+                data: {
+                  ...selectedBicycle.data,
+                  price: Number(e.target.value),
+                },
+              })
+            }
+          />
 
           <label className="block font-medium">Quantity</label>
-          <InputText type="number" className="w-full p-2 border rounded" value={selectedBicycle?.data.quantity || ""} onChange={(e) => setSelectedBicycle({ ...selectedBicycle, data: { ...selectedBicycle.data, quantity: Number(e.target.value) } })} />
+          <InputText
+            type="number"
+            className="w-full p-2 border rounded"
+            value={selectedBicycle?.data.quantity || ""}
+            onChange={(e) =>
+              setSelectedBicycle({
+                ...selectedBicycle,
+                data: {
+                  ...selectedBicycle.data,
+                  quantity: Number(e.target.value),
+                },
+              })
+            }
+          />
 
           <div className="flex justify-end gap-2 mt-4">
-            <Button label="Cancel" icon="pi pi-times" onClick={() => setUpdateModalOpen(false)} className="p-button-text" />
-            <Button label="Save" icon="pi pi-check" onClick={handleUpdateSubmit} className="p-button-success" />
+            <Button
+              label="Cancel"
+              icon="pi pi-times"
+              onClick={() => setUpdateModalOpen(false)}
+              className="p-button-text"
+            />
+            <Button
+              label="Save"
+              icon="pi pi-check"
+              onClick={handleUpdateSubmit}
+              className="p-button-success"
+            />
           </div>
         </div>
       </Dialog>

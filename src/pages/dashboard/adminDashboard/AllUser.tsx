@@ -8,12 +8,16 @@ import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { toast } from "sonner";
-import { useDeleteUserMutation, useGetUsersQuery, useUpdateUserMutation } from "../../../redux/features/admin/user/userApi";
+import {
+  useDeleteUserMutation,
+  useGetUsersQuery,
+  useUpdateUserMutation,
+} from "../../../redux/features/admin/user/userApi";
 
 const AllUser = () => {
   const { data: users, isFetching, refetch } = useGetUsersQuery(undefined);
-  console.log(users)
-  const [updateUser] = useUpdateUserMutation()
+  console.log(users);
+  const [updateUser] = useUpdateUserMutation();
   const [deleteUser] = useDeleteUserMutation();
 
   const [nodes, setNodes] = useState<TreeNode[]>([]);
@@ -27,11 +31,13 @@ const AllUser = () => {
 
   useEffect(() => {
     if (users?.data) {
-      const tableData: TreeNode[] = users.data.map(({ _id, name, email, role, status }) => ({
-        key: _id,
-        data: { name, email, role, status },
-        leaf: true,
-      }));
+      const tableData: TreeNode[] = users.data.map(
+        ({ _id, name, email, role, status }) => ({
+          key: _id,
+          data: { name, email, role, status },
+          leaf: true,
+        })
+      );
 
       setTotalRecords(users.data.length);
       setNodes(tableData.slice(first, first + rows));
@@ -54,7 +60,10 @@ const AllUser = () => {
     const toastId = toast.loading("Updating...");
 
     try {
-      await updateUser({ id: selectedUser.key, data: { ...selectedUser.data } }).unwrap();
+      await updateUser({
+        id: selectedUser.key,
+        data: { ...selectedUser.data },
+      }).unwrap();
       toast.success("User updated successfully!", { id: toastId });
       refetch();
       setUpdateModalOpen(false);
@@ -92,16 +101,32 @@ const AllUser = () => {
             onPage={onPage}
             className="w-full min-w-[600px]"
           >
-            <Column field="name" header="name" className="p-2 md:p-4 text-xs md:text-sm" />
-            <Column field="email" header="Email" className="p-2 md:p-4 text-xs md:text-sm" />
-            <Column field="role" header="Role" className="p-2 md:p-4 text-xs md:text-sm" />
-            <Column field="status" header="Status" className="p-2 md:p-4 text-xs md:text-sm" />
+            <Column
+              field="name"
+              header="name"
+              className="p-2 md:p-4 text-xs md:text-sm"
+            />
+            <Column
+              field="email"
+              header="Email"
+              className="p-2 md:p-4 text-xs md:text-sm"
+            />
+            <Column
+              field="role"
+              header="Role"
+              className="p-2 md:p-4 text-xs md:text-sm"
+            />
+            <Column
+              field="status"
+              header="Status"
+              className="p-2 md:p-4 text-xs md:text-sm"
+            />
 
             <Column
               header="Update"
               body={(rowData) => (
                 <button
-                  className="p-1 md:p-2 bg-blue-500 text-white rounded text-xs md:text-sm"
+                  className="p-1 md:p-2 bg-blue-500 text-black rounded text-xs md:text-sm"
                   onClick={() => handleUpdateClick(rowData)}
                 >
                   Update
@@ -114,7 +139,7 @@ const AllUser = () => {
               header="Delete"
               body={(rowData) => (
                 <button
-                  className="p-1 md:p-2 bg-red-500 text-white rounded text-xs md:text-sm"
+                  className="p-1 md:p-2 bg-red-500 text-black rounded text-xs md:text-sm"
                   onClick={() => handleDelete(rowData.key)}
                 >
                   Delete
