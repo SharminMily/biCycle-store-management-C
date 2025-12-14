@@ -9,7 +9,7 @@ const NavTypewriter = () => {
     <div className="bg-black py-3 text-white text-center font-bold text-sm md:text-base tracking-wider">
       <div className="flex justify-center items-center gap-3">
         <span>BYCICLE</span>
-        <span className="text-red-600">
+        <span className="text-red-500">
           <Typewriter
             options={{
               loop: true,
@@ -59,13 +59,13 @@ const Navbar = () => {
               <div className="absolute -inset-4 bg-red-600/10 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
               <div className="relative flex items-center">
                 <img
-                  alt="BYCICLE"
+                  alt="BICYCLE"
                   src="https://i.ibb.co.com/Rp3STcry/bicycle-logo-removebg-preview.png"
                   width={70}
                   className="transition-all duration-700 group-hover:scale-110 group-hover:rotate-6"
                 />
                 <span className="ml-4 text-4xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-black to-red-600">
-                  BYCICLE
+                  BICYCLE
                 </span>
               </div>
             </div>

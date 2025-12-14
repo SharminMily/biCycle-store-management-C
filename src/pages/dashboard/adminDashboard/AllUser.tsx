@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState, useEffect } from "react";
-import { TreeTable, TreeTablePageEvent } from "primereact/treetable";
+import { useState } from "react";
+import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import { TreeNode } from "primereact/treenode";
 import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
@@ -13,57 +12,35 @@ import {
   useGetUsersQuery,
   useUpdateUserMutation,
 } from "../../../redux/features/admin/user/userApi";
+import { Badge } from "primereact/badge";
 
 const AllUser = () => {
-  const { data: users, isFetching, refetch } = useGetUsersQuery(undefined);
-  console.log(users);
+  const { data: users, isLoading, refetch } = useGetUsersQuery(undefined);
   const [updateUser] = useUpdateUserMutation();
   const [deleteUser] = useDeleteUserMutation();
-
-  const [nodes, setNodes] = useState<TreeNode[]>([]);
-  const [first, setFirst] = useState<number>(0);
-  const [rows, setRows] = useState<number>(15);
-  const [totalRecords, setTotalRecords] = useState<number>(0);
-  const [loading, setLoading] = useState<boolean>(isFetching);
 
   const [updateModalOpen, setUpdateModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<any>(null);
 
-  useEffect(() => {
-    if (users?.data) {
-      const tableData: TreeNode[] = users.data.map(
-        ({ _id, name, email, role, status }) => ({
-          key: _id,
-          data: { name, email, role, status },
-          leaf: true,
-        })
-      );
-
-      setTotalRecords(users.data.length);
-      setNodes(tableData.slice(first, first + rows));
-      setLoading(false);
-    }
-  }, [users, first, rows]);
-
-  const onPage = (event: TreeTablePageEvent) => {
-    setFirst(event.first);
-    setRows(event.rows);
-  };
-
   const handleUpdateClick = (user: any) => {
-    setSelectedUser(user);
+    setSelectedUser({ ...user }); // Deep copy
     setUpdateModalOpen(true);
   };
 
   const handleUpdateSubmit = async () => {
     if (!selectedUser) return;
-    const toastId = toast.loading("Updating...");
 
+    const toastId = toast.loading("Updating user...");
     try {
       await updateUser({
-        id: selectedUser.key,
-        data: { ...selectedUser.data },
+        id: selectedUser._id,
+        data: {
+          email: selectedUser.email,
+          role: selectedUser.role,
+          status: selectedUser.status,
+        },
       }).unwrap();
+
       toast.success("User updated successfully!", { id: toastId });
       refetch();
       setUpdateModalOpen(false);
@@ -73,7 +50,7 @@ const AllUser = () => {
   };
 
   const handleDelete = async (id: string) => {
-    const toastId = toast.loading("Deleting...");
+    const toastId = toast.loading("Deleting user...");
     try {
       await deleteUser(id).unwrap();
       toast.success("User deleted successfully!", { id: toastId });
@@ -83,133 +60,193 @@ const AllUser = () => {
     }
   };
 
+  // Role badge template
+  const roleBodyTemplate = (rowData: any) => (
+    <span
+      className={`px-3 py-1 rounded-full text-sm font-medium ${
+        rowData.role === "admin"
+          ? "bg-purple-100 text-purple-800"
+          : "bg-blue-100 text-blue-800"
+      }`}
+    >
+      {rowData.role?.toUpperCase()}
+    </span>
+  );
+
+  // Status badge template
+  const statusBodyTemplate = (rowData: any) => (
+    <span
+      className={`px-3 py-1 rounded-full text-sm font-medium ${
+        rowData.status === "active"
+          ? "bg-green-100 text-green-800"
+          : rowData.status === "blocked"
+          ? "bg-red-100 text-red-800"
+          : "bg-gray-100 text-gray-800"
+      }`}
+    >
+      {rowData.status?.charAt(0).toUpperCase() + rowData.status?.slice(1)}
+    </span>
+  );
+
+  // Action buttons
+  const actionBodyTemplate = (rowData: any) => (
+    <div className="flex gap-3 justify-center">
+      <button
+        onClick={() => handleUpdateClick(rowData)}
+        className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow transition"
+      >
+        Update
+      </button>
+      <button
+        onClick={() => handleDelete(rowData._id)}
+        className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg shadow transition"
+      >
+        Delete
+      </button>
+    </div>
+  );
+
   return (
-    <div className="bg-gray-100 p-4 md:p-6">
-      <h2 className="text-xl md:text-2xl font-bold text-center mb-4 md:mb-6 text-gray-800">
-        Manage All Users
-      </h2>
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white py-8 px-4 sm:py-12">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-10">
+          <h1 className="text-4xl sm:text-5xl font-thin text-gray-900 mb-2">
+            Manage All Users
+          </h1>
+          <p className="text-lg text-gray-600">Control user roles, status, and access</p>
+        </div>
 
-      <div className="flex justify-center">
-        <div className="bg-white shadow-lg rounded-lg p-4 w-full max-w-5xl overflow-x-auto">
-          <TreeTable
-            value={nodes}
-            loading={loading}
-            paginator
-            rows={rows}
-            first={first}
-            totalRecords={totalRecords}
-            onPage={onPage}
-            className="w-full min-w-[600px]"
-          >
-            <Column
-              field="name"
-              header="name"
-              className="p-2 md:p-4 text-xs md:text-sm"
-            />
-            <Column
-              field="email"
-              header="Email"
-              className="p-2 md:p-4 text-xs md:text-sm"
-            />
-            <Column
-              field="role"
-              header="Role"
-              className="p-2 md:p-4 text-xs md:text-sm"
-            />
-            <Column
-              field="status"
-              header="Status"
-              className="p-2 md:p-4 text-xs md:text-sm"
-            />
+        {/* Users Table Card */}
+        <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden">
+          <div className="p-6 border-b border-gray-200">
+            <h2 className="text-2xl font-semibold text-gray-900">User Directory</h2>
+          </div>
 
-            <Column
-              header="Update"
-              body={(rowData) => (
-                <button
-                  className="p-1 md:p-2 bg-blue-500 text-black rounded text-xs md:text-sm"
-                  onClick={() => handleUpdateClick(rowData)}
-                >
-                  Update
-                </button>
-              )}
-              className="p-2 md:p-4"
-            />
-
-            <Column
-              header="Delete"
-              body={(rowData) => (
-                <button
-                  className="p-1 md:p-2 bg-red-500 text-black rounded text-xs md:text-sm"
-                  onClick={() => handleDelete(rowData.key)}
-                >
-                  Delete
-                </button>
-              )}
-              className="p-2 md:p-4"
-            />
-          </TreeTable>
+          <div className="p-4 sm:p-6">
+            <DataTable
+              value={users?.data || []}
+              loading={isLoading}
+              responsiveLayout="scroll"
+              paginator
+              rows={10}
+              rowsPerPageOptions={[10, 20, 50]}
+              paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+              currentPageReportTemplate="{first} - {last} of {totalRecords} users"
+              emptyMessage="No users found."
+              className="w-full"
+            >
+              <Column
+                field="name"
+                header="Name"
+                sortable
+                className="font-medium"
+              />
+              <Column
+                field="email"
+                header="Email"
+                sortable
+                body={(rowData) => (
+                  <span className="break-all">{rowData.email}</span>
+                )}
+              />
+              <Column
+                field="role"
+                header="Role"
+                sortable
+                body={roleBodyTemplate}
+                className="text-center"
+              />
+              <Column
+                field="status"
+                header="Status"
+                sortable
+                body={statusBodyTemplate}
+                className="text-center"
+              />
+              <Column
+                header="Actions"
+                body={actionBodyTemplate}
+                className="text-center"
+              />
+            </DataTable>
+          </div>
         </div>
       </div>
 
-      {/* Update Modal */}
+      {/* Update User Modal */}
       <Dialog
         header="Update User"
         visible={updateModalOpen}
-        style={{ width: "90%", maxWidth: "450px" }}
         onHide={() => setUpdateModalOpen(false)}
+        style={{ width: "90vw", maxWidth: "500px" }}
+        breakpoints={{ "960px": "75vw", "641px": "95vw" }}
       >
-        <div className="space-y-3">
-          <label className="block font-medium">Email</label>
-          <InputText
-            className="w-full p-2 border rounded"
-            value={selectedUser?.data.email || ""}
-            onChange={(e) =>
-              setSelectedUser({
-                ...selectedUser,
-                data: { ...selectedUser.data, email: e.target.value },
-              })
-            }
-          />
+        {selectedUser && (
+          <div className="space-y-5">
+            <div>
+              <label className="block text-gray-700 font-medium mb-2">Name</label>
+              <InputText
+                value={selectedUser.name || ""}
+                disabled
+                className="w-full bg-gray-100"
+              />
+            </div>
 
-          <label className="block font-medium">Role</label>
-          <InputText
-            className="w-full p-2 border rounded"
-            value={selectedUser?.data.role || ""}
-            onChange={(e) =>
-              setSelectedUser({
-                ...selectedUser,
-                data: { ...selectedUser.data, role: e.target.value },
-              })
-            }
-          />
+            <div>
+              <label className="block text-gray-700 font-medium mb-2">Email</label>
+              <InputText
+                value={selectedUser.email}
+                onChange={(e) =>
+                  setSelectedUser({ ...selectedUser, email: e.target.value })
+                }
+                className="w-full"
+              />
+            </div>
 
-          <label className="block font-medium">Status</label>
-          <InputText
-            className="w-full p-2 border rounded"
-            value={selectedUser?.data.status || ""}
-            onChange={(e) =>
-              setSelectedUser({
-                ...selectedUser,
-                data: { ...selectedUser.data, status: e.target.value },
-              })
-            }
-          />
+            <div>
+              <label className="block text-gray-700 font-medium mb-2">Role</label>
+              <select
+                value={selectedUser.role}
+                onChange={(e) =>
+                  setSelectedUser({ ...selectedUser, role: e.target.value })
+                }
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="user">User</option>
+                <option value="admin">Admin</option>
+              </select>
+            </div>
 
-          <div className="flex justify-end gap-2 mt-4">
-            <Button
-              label="Cancel"
-              icon="pi pi-times"
-              onClick={() => setUpdateModalOpen(false)}
-              className="p-button-text"
-            />
-            <Button
-              label="Save"
-              icon="pi pi-check"
-              onClick={handleUpdateSubmit}
-              className="p-button-success"
-            />
+            <div>
+              <label className="block text-gray-700 font-medium mb-2">Status</label>
+              <select
+                value={selectedUser.status}
+                onChange={(e) =>
+                  setSelectedUser({ ...selectedUser, status: e.target.value })
+                }
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="active">Active</option>
+                <option value="blocked">Blocked</option>
+                <option value="pending">Pending</option>
+              </select>
+            </div>
+
+            <div className="flex justify-end gap-3 mt-6">
+              <Button
+                label="Cancel"
+                onClick={() => setUpdateModalOpen(false)}
+                className="p-button-secondary"
+              />
+              <Button
+                label="Save Changes"
+                onClick={handleUpdateSubmit}
+                className="p-button-success"
+              />
+            </div>
           </div>
-        </div>
+        )}
       </Dialog>
     </div>
   );

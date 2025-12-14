@@ -1,8 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState, useEffect } from "react";
-import { TreeTable, TreeTablePageEvent } from "primereact/treetable";
+import { useState } from "react";
+import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import { TreeNode } from "primereact/treenode";
 import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
@@ -14,148 +14,136 @@ import {
 } from "../../../redux/features/admin/product/productApi";
 
 const ManageBicycle = () => {
-  const {
-    data: products,
-    isFetching,
-    refetch,
-  } = useGetProductsQuery(undefined);
+  const { data: products, isLoading, refetch } = useGetProductsQuery(undefined);
   const [updateProduct] = useUpdateProductsMutation();
-
   const [deleteProduct] = useDeleteProductsMutation();
 
-  const [nodes, setNodes] = useState<TreeNode[]>([]);
-  const [first, setFirst] = useState<number>(0);
-  const [rows, setRows] = useState<number>(15);
-  const [totalRecords, setTotalRecords] = useState<number>(0);
-  const [loading, setLoading] = useState<boolean>(isFetching);
-
-  // Update modal state
   const [updateModalOpen, setUpdateModalOpen] = useState(false);
   const [selectedBicycle, setSelectedBicycle] = useState<any>(null);
-  console.log(selectedBicycle);
 
-  useEffect(() => {
-    if (products?.data) {
-      const tableData: TreeNode[] = products.data.map(
-        ({ _id, name, brand, price, quantity, image }) => ({
-          key: _id,
-          data: { name, brand, price, quantity, image },
-          leaf: true,
-        })
-      );
-
-      setTotalRecords(products.data.length);
-      setNodes(tableData.slice(first, first + rows));
-      setLoading(false);
-    }
-  }, [products, first, rows]);
-
-  const onPage = (event: TreeTablePageEvent) => {
-    setFirst(event.first);
-    setRows(event.rows);
-  };
-
-  // Open update modal
   const handleUpdateClick = (bicycle: any) => {
-    setSelectedBicycle(bicycle);
+    setSelectedBicycle({ ...bicycle }); // Deep copy to avoid mutation issues
     setUpdateModalOpen(true);
   };
 
-  // Handle form update
   const handleUpdateSubmit = async () => {
     if (!selectedBicycle) return;
 
-    const toastId = toast.loading("Updating...");
-
+    const toastId = toast.loading("Updating bicycle...");
     try {
       await updateProduct({
-        id: selectedBicycle.key,
-        data: { ...selectedBicycle.data },
+        id: selectedBicycle._id,
+        data: {
+          name: selectedBicycle.name,
+          brand: selectedBicycle.brand,
+          price: Number(selectedBicycle.price),
+          quantity: Number(selectedBicycle.quantity),
+        },
       }).unwrap();
+
       toast.success("Bicycle updated successfully!", { id: toastId });
       refetch();
       setUpdateModalOpen(false);
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       toast.error("Failed to update bicycle", { id: toastId });
     }
   };
 
-  // Handle delete action
   const handleDelete = async (id: string) => {
-    const toastId = toast.loading("Deleting...");
+    const toastId = toast.loading("Deleting bicycle...");
     try {
       await deleteProduct(id).unwrap();
       toast.success("Bicycle deleted successfully!", { id: toastId });
       refetch();
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       toast.error("Failed to delete bicycle", { id: toastId });
     }
   };
 
-  return (
-    <div className="bg-gray-100 p-6">
-      <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">
-        Manage Bicycles
-      </h2>
+  // Image body template
+  const imageBodyTemplate = (rowData: any) => (
+    <img
+      src={rowData.image}
+      alt={rowData.name}
+      className="w-16 h-16 object-cover rounded-lg shadow-md border border-gray-200"
+    />
+  );
 
-      <div className="flex justify-center items-center">
-        <div className="bg-white shadow-lg rounded-lg p-4 w-full max-w-5xl overflow-auto max-h-[calc(100vh-100px)]">
-          <TreeTable
-            value={nodes}
-            loading={loading}
-            paginator
-            rows={rows}
-            first={first}
-            totalRecords={totalRecords}
-            onPage={onPage}
-            className="w-full"
-          >
-            <Column
-              field="name"
-              header="Bicycle Name"
-              expander
-              className="p-4"
-              body={(rowData) => (
-                <div className="flex items-center gap-2">
-                  <img
-                    src={rowData.data.image}
-                    alt="Bicycle"
-                    className="w-12 h-12 object-cover rounded-md"
-                  />
-                  <span>{rowData.data.name}</span>
-                </div>
-              )}
-            />
-            <Column field="brand" header="Brand" className="p-4" />
-            <Column field="price" header="Price" className="p-4" />
-            <Column field="quantity" header="Quantity" className="p-4" />
-            <Column
-              header="Update"
-              body={(rowData) => (
-                <button
-                  className="p-2 bg-blue-500 text-black rounded"
-                  onClick={() => handleUpdateClick(rowData)}
-                >
-                  Update
-                </button>
-              )}
-              className="p-4"
-            />
-            <Column
-              header="Delete"
-              body={(rowData) => (
-                <button
-                  className="p-2 bg-red-500 text-black rounded"
-                  onClick={() => handleDelete(rowData.key)}
-                >
-                  Delete
-                </button>
-              )}
-              className="p-4"
-            />
-          </TreeTable>
+  // Action buttons template
+  const actionBodyTemplate = (rowData: any) => (
+    <div className="flex gap-3 justify-center">
+      <button
+        onClick={() => handleUpdateClick(rowData)}
+        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 shadow transition"
+      >
+        Update
+      </button>
+      <button
+        onClick={() => handleDelete(rowData._id)}
+        className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 shadow transition"
+      >
+        Delete
+      </button>
+    </div>
+  );
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white py-8 px-4 sm:py-12">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-10">
+          <h1 className="text-4xl sm:text-5xl font-thin text-gray-900 mb-2">
+            Manage Bicycles
+          </h1>
+          <p className="text-lg text-gray-600">View, update, or remove products from inventory</p>
+        </div>
+
+        {/* Table Card */}
+        <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden">
+          <div className="p-6 border-b border-gray-200">
+            <h2 className="text-2xl font-semibold text-gray-900">Product Inventory</h2>
+          </div>
+
+          <div className="p-4 sm:p-6">
+            <DataTable
+              value={products?.data || []}
+              loading={isLoading}
+              responsiveLayout="scroll"
+              paginator
+              rows={10}
+              rowsPerPageOptions={[10, 20, 50]}
+              paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+              currentPageReportTemplate="{first} to {last} of {totalRecords}"
+              className="w-full"
+              emptyMessage="No bicycles found."
+            >
+              <Column
+                header="Image"
+                body={imageBodyTemplate}
+                className="text-center"
+              />
+              <Column
+                field="name"
+                header="Bicycle Name"
+                sortable
+                className="font-medium"
+              />
+              <Column field="brand" header="Brand" sortable />
+              <Column
+                field="price"
+                header="Price"
+                sortable
+                body={(rowData) => `$${Number(rowData.price).toFixed(2)}`}
+              />
+              <Column field="quantity" header="Stock" sortable />
+              <Column
+                header="Actions"
+                body={actionBodyTemplate}
+                className="text-center"
+              />
+            </DataTable>
+          </div>
         </div>
       </div>
 
@@ -163,81 +151,80 @@ const ManageBicycle = () => {
       <Dialog
         header="Update Bicycle"
         visible={updateModalOpen}
-        style={{ width: "450px" }}
         onHide={() => setUpdateModalOpen(false)}
+        style={{ width: "90vw", maxWidth: "500px" }}
+        breakpoints={{ "960px": "75vw", "641px": "90vw" }}
       >
-        <div className="space-y-4">
-          <label className="block font-medium">Bicycle Name</label>
-          <InputText
-            className="w-full p-2 border rounded"
-            value={selectedBicycle?.data.name || ""}
-            onChange={(e) =>
-              setSelectedBicycle({
-                ...selectedBicycle,
-                data: { ...selectedBicycle.data, name: e.target.value },
-              })
-            }
-          />
+        {selectedBicycle && (
+          <div className="space-y-5">
+            <div>
+              <label className="block text-gray-700 font-medium mb-2">Bicycle Name</label>
+              <InputText
+                value={selectedBicycle.name}
+                onChange={(e) =>
+                  setSelectedBicycle({ ...selectedBicycle, name: e.target.value })
+                }
+                className="w-full"
+              />
+            </div>
 
-          <label className="block font-medium">Brand</label>
-          <InputText
-            className="w-full p-2 border rounded"
-            value={selectedBicycle?.data.brand || ""}
-            onChange={(e) =>
-              setSelectedBicycle({
-                ...selectedBicycle,
-                data: { ...selectedBicycle.data, brand: e.target.value },
-              })
-            }
-          />
+            <div>
+              <label className="block text-gray-700 font-medium mb-2">Brand</label>
+              <InputText
+                value={selectedBicycle.brand}
+                onChange={(e) =>
+                  setSelectedBicycle({ ...selectedBicycle, brand: e.target.value })
+                }
+                className="w-full"
+              />
+            </div>
 
-          <label className="block font-medium">Price ($)</label>
-          <InputText
-            type="number"
-            className="w-full p-2 border rounded"
-            value={selectedBicycle?.data.price || ""}
-            onChange={(e) =>
-              setSelectedBicycle({
-                ...selectedBicycle,
-                data: {
-                  ...selectedBicycle.data,
-                  price: Number(e.target.value),
-                },
-              })
-            }
-          />
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-gray-700 font-medium mb-2">Price ($)</label>
+                <InputText
+                  type="number"
+                  value={selectedBicycle.price}
+                  onChange={(e) =>
+                    setSelectedBicycle({
+                      ...selectedBicycle,
+                      price: Number(e.target.value),
+                    })
+                  }
+                  className="w-full"
+                />
+              </div>
 
-          <label className="block font-medium">Quantity</label>
-          <InputText
-            type="number"
-            className="w-full p-2 border rounded"
-            value={selectedBicycle?.data.quantity || ""}
-            onChange={(e) =>
-              setSelectedBicycle({
-                ...selectedBicycle,
-                data: {
-                  ...selectedBicycle.data,
-                  quantity: Number(e.target.value),
-                },
-              })
-            }
-          />
+              <div>
+                <label className="block text-gray-700 font-medium mb-2">Quantity</label>
+                <InputText
+                  type="number"
+                  value={selectedBicycle.quantity}
+                  onChange={(e) =>
+                    setSelectedBicycle({
+                      ...selectedBicycle,
+                      quantity: Number(e.target.value),
+                    })
+                  }
+                  className="w-full"
+                />
+              </div>
+            </div>
 
-          <div className="flex justify-end gap-2 mt-4">
-            <Button
-              label="Cancel"
-              icon="pi pi-times"
-              onClick={() => setUpdateModalOpen(false)}
-              className="p-button-text"
-            />
-            <Button
-              label="Save"
-              icon="pi pi-check"
-              onClick={handleUpdateSubmit}
-              className="p-button-success"
-            />
+            <div className="flex justify-end gap-3 mt-6">
+              <Button
+                label="Cancel"
+                onClick={() => setUpdateModalOpen(false)}
+                className="p-button-secondary"
+              />
+              <Button
+                label="Save Changes"
+                onClick={handleUpdateSubmit}
+                className="p-button-success"
+              />
+            </div>
           </div>
-        </div>
+        )}
       </Dialog>
     </div>
   );

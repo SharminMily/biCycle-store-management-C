@@ -1,10 +1,8 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState, useEffect } from "react";
-import { TreeTable, TreeTablePageEvent } from "primereact/treetable";
+import { useState } from "react";
+import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import { TreeNode } from "primereact/treenode";
 import { toast } from "sonner";
 import {
   useDeleteOrderMutation,
@@ -12,47 +10,12 @@ import {
 } from "../../../redux/features/order/orderApi";
 
 const Orders = () => {
-  const {
-    data: responseData,
-    isFetching,
-    refetch,
-  } = useGetOrdersQuery(undefined);
-  const orders = responseData?.data || []; // Access orders from the response
-  const [deleteOrder] = useDeleteOrderMutation(); // Mutation to delete orders
+  const { data: responseData, isLoading, refetch } = useGetOrdersQuery(undefined);
+  const orders = responseData?.data || [];
+  const [deleteOrder] = useDeleteOrderMutation();
 
-  const [nodes, setNodes] = useState<TreeNode[]>([]); // To store table rows
-  const [first, setFirst] = useState<number>(0); // Pagination start
-  const [rows, setRows] = useState<number>(15); // Rows per page
-  const [totalRecords, setTotalRecords] = useState<number>(0); // Total number of records
-  const [loading, setLoading] = useState<boolean>(isFetching); // Loading state
-
-  useEffect(() => {
-    if (Array.isArray(orders)) {
-      const tableData: TreeNode[] = orders.map(
-        ({ _id, transaction, user, totalPrice, status }) => ({
-          key: _id,
-          data: { transaction, user, totalPrice, status },
-          leaf: true,
-        })
-      );
-
-      setTotalRecords(orders.length); // Update total records
-      setNodes(tableData.slice(first, first + rows)); // Set table rows for pagination
-      setLoading(false); // Data is fetched, stop loading
-    } else {
-      console.error("Orders is not an array:", orders); // Log the type of `orders` if it's not an array
-    }
-  }, [orders, first, rows]);
-
-  // Handle pagination
-  const onPage = (event: TreeTablePageEvent) => {
-    setFirst(event.first);
-    setRows(event.rows);
-  };
-
-  // Handle order deletion
   const handleDelete = async (id: string) => {
-    const toastId = toast.loading("Deleting...");
+    const toastId = toast.loading("Deleting order...");
     try {
       await deleteOrder(id).unwrap();
       toast.success("Order deleted successfully!", { id: toastId });
@@ -62,60 +25,124 @@ const Orders = () => {
     }
   };
 
+  // Status badge template
+  const statusBodyTemplate = (rowData: any) => {
+    const status = rowData.status?.toLowerCase() || "pending";
+    const colorMap: Record<string, { bg: string; text: string }> = {
+      paid: { bg: "bg-green-100 text-green-800", text: "Paid" },
+      pending: { bg: "bg-yellow-100 text-yellow-800", text: "Pending" },
+      failed: { bg: "bg-red-100 text-red-800", text: "Failed" },
+      cancelled: { bg: "bg-gray-100 text-gray-800", text: "Cancelled" },
+    };
+
+    const { bg, text } = colorMap[status] || colorMap.pending;
+
+    return (
+      <span className={`px-4 py-2 rounded-full text-sm font-bold ${bg}`}>
+        {text}
+      </span>
+    );
+  };
+
+  // Price formatting
+  const priceBodyTemplate = (rowData: any) => (
+    <span className="text-lg font-semibold text-gray-900">
+      ${Number(rowData.totalPrice).toFixed(2)}
+    </span>
+  );
+
+  // Transaction code
+  const transactionBodyTemplate = (rowData: any) => (
+    <span className="font-mono text-sm text-gray-700">
+      {rowData.transaction?.sp_code || "N/A"}
+    </span>
+  );
+
+  // User email or ID
+  const userBodyTemplate = (rowData: any) => (
+    <div>
+      <p className="font-medium text-gray-900">{rowData.user?.name || "N/A"}</p>
+      <p className="text-sm text-gray-500 break-all">{rowData.user?.email || rowData.user?._id || "N/A"}</p>
+    </div>
+  );
+
+  // Delete button
+  const actionBodyTemplate = (rowData: any) => (
+    <button
+      onClick={() => handleDelete(rowData._id)}
+      className="px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg shadow transition"
+    >
+      Delete
+    </button>
+  );
+
   return (
-    <div className="bg-gray-100 p-4 md:p-6">
-      <h2 className="text-xl md:text-2xl font-bold text-center mb-4 md:mb-6 text-gray-800">
-        Manage All Orders
-      </h2>
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white py-8 px-4 sm:py-12">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-10">
+          <h1 className="text-4xl sm:text-5xl font-thin text-gray-900 mb-2">
+            Manage All Orders
+          </h1>
+          <p className="text-lg text-gray-600">
+            Track and manage customer orders across the platform
+          </p>
+        </div>
 
-      <div className="flex justify-center">
-        <div className="bg-white shadow-lg rounded-lg p-4 w-full max-w-5xl overflow-x-auto">
-          <TreeTable
-            value={nodes}
-            loading={loading}
-            paginator
-            rows={rows}
-            first={first}
-            totalRecords={totalRecords}
-            onPage={onPage}
-            className="w-full min-w-[600px]"
-          >
-            <Column
-              field="transaction.sp_code"
-              header="Transaction Code"
-              className="p-2 md:p-4 text-xs md:text-sm"
-            />
-            <Column
-              field="user"
-              header="User ID"
-              className="p-2 md:p-4 text-xs md:text-sm"
-            />
+        {/* Orders Table Card */}
+        <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden">
+          <div className="p-6 border-b border-gray-200">
+            <h2 className="text-2xl font-semibold text-gray-900">
+              Order History ({orders.length} orders)
+            </h2>
+          </div>
 
-            <Column
-              field="totalPrice"
-              header="Total Price"
-              className="p-4 md:p-4 text-xs md:text-sm"
-            />
-
-            <Column
-              field="status"
-              header="Status"
-              className="p-2 md:p-4 text-xs md:text-sm"
-            />
-
-            <Column
-              header="Delete"
-              body={(rowData) => (
-                <button
-                  className="p-1 md:p-2 bg-red-500 text-black rounded text-xs md:text-sm"
-                  onClick={() => handleDelete(rowData.key)}
-                >
-                  Delete
-                </button>
-              )}
-              className="p-2 md:p-4"
-            />
-          </TreeTable>
+          <div className="p-4 sm:p-6">
+            <DataTable
+              value={orders}
+              loading={isLoading}
+              responsiveLayout="scroll"
+              paginator
+              rows={10}
+              rowsPerPageOptions={[10, 20, 50]}
+              paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+              currentPageReportTemplate="{first} - {last} of {totalRecords} orders"
+              emptyMessage="No orders found."
+              className="w-full"
+            >
+              <Column
+                header="Customer"
+                body={userBodyTemplate}
+                sortable
+                sortField="user.name"
+                className="min-w-[180px]"
+              />
+              <Column
+                header="Transaction Code"
+                body={transactionBodyTemplate}
+                className="font-mono min-w-[140px]"
+              />
+              <Column
+                header="Total Amount"
+                body={priceBodyTemplate}
+                sortable
+                sortField="totalPrice"
+                className="text-right min-w-[120px]"
+              />
+              <Column
+                header="Status"
+                body={statusBodyTemplate}
+                sortable
+                sortField="status"
+                className="text-center min-w-[120px]"
+              />
+              <Column
+                header="Action"
+                body={actionBodyTemplate}
+                className="text-center min-w-[120px]"
+              />
+            </DataTable>
+          </div>
         </div>
       </div>
     </div>
