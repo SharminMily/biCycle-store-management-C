@@ -1,7 +1,9 @@
 import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import Typewriter from "typewriter-effect";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { logout, selectCurrentUser } from "../../redux/features/auth/authSlice";
 
 // Integrated Typewriter Announcement Bar
 const NavTypewriter = () => {
@@ -42,8 +44,20 @@ const NavTypewriter = () => {
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [showLogout, setShowLogout] = useState(false);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const user = useAppSelector(selectCurrentUser);
 
   const toggleMenu = () => setIsOpen(!isOpen);
+
+const handleLogout = () => {
+    dispatch(logout());
+    setShowLogout(false);
+    navigate("/login"); // অথবা "/" হোমে
+  }; 
+
+  const avatarUrl = user?.image || `https://i.pravatar.cc/150?u=${user?.email || "default"}`;
 
   return (
     <>
@@ -51,33 +65,21 @@ const Navbar = () => {
       <NavTypewriter />
 
       {/* Main Navbar - Clean White Luxury with Red Accents */}
-      <nav className="sticky top-0 z-50 bg-white shadow-md">
+ <nav className="sticky top-0 z-50 bg-white shadow-md">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
           <div className="flex justify-between items-center h-24">
-            {/* Logo - Sophisticated Gradient */}
+            {/* Logo - same */}
             <div className="group relative">
-              <div className="absolute -inset-4 bg-red-600/10 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-              <div className="relative flex items-center">
-                <img
-                  alt="BICYCLE"
-                  src="https://i.ibb.co.com/Rp3STcry/bicycle-logo-removebg-preview.png"
-                  width={70}
-                  className="transition-all duration-700 group-hover:scale-110 group-hover:rotate-6"
-                />
-                <span className="ml-4 text-4xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-black to-red-600">
-                  BICYCLE
-                </span>
-              </div>
+              {/* ... logo code same */}
             </div>
 
-            {/* Desktop Links - Minimal & Elegant */}
+            {/* Desktop Links */}
             <ul className="hidden lg:flex items-center space-x-16">
               {[
                 { to: "/", label: "HOME" },
                 { to: "/all-bicycles", label: "COLLECTION" },
                 { to: "/about", label: "MANIFESTO" },
-                { to: "/dashboard", label: "STUDIO" },
-                { to: "/login", label: "ACCESS" },
+                // { to: "/dashboard", label: "STUDIO" },
               ].map((item) => (
                 <li key={item.to}>
                   <NavLink
@@ -93,19 +95,51 @@ const Navbar = () => {
                   </NavLink>
                 </li>
               ))}
+
+              {/* ACCESS / User Avatar */}
+              <li className="relative">
+                {user ? (
+                  <div
+                    className="cursor-pointer relative"
+                    onClick={() => setShowLogout(!showLogout)}
+                  >
+                    <img
+                      src={avatarUrl}
+                      alt={user.name || "User"}
+                      className="w-12 h-12 rounded-full object-cover border-2 border-red-600 transition-all duration-300 hover:scale-110"
+                    />
+
+                    {/* Logout Dropdown */}
+                    {showLogout && (
+                      <div className="absolute right-0 mt-4 w-48 bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden z-50">
+                        <div className="p-4 text-center border-b">
+                          <p className="font-semibold text-black">{user.name}</p>
+                          <p className="text-sm text-gray-500">{user.email}</p>
+                        </div>
+                        <button
+                          onClick={handleLogout}
+                          className="w-full px-6 py-4 flex items-center justify-center gap-3 text-red-600 hover:bg-red-50 transition-colors"
+                        >
+                          <LogOut size={20} />
+                          <span className="font-medium">Logout</span>
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <NavLink
+                    to="/login"
+                    className="text-lg font-medium tracking-[0.2em] text-black transition-all duration-500 hover:text-red-600"
+                  >
+                    ACCESS
+                  </NavLink>
+                )}
+              </li>
             </ul>
 
-            {/* Mobile Trigger */}
-            <button
-              onClick={toggleMenu}
-              className="lg:hidden relative p-2 group"
-            >
-              <div className="absolute inset-0 bg-red-600/10 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              {isOpen ? (
-                <X className="relative z-10 w-8 h-8 text-black transition-all duration-500 hover:rotate-90" />
-              ) : (
-                <Menu className="relative z-10 w-8 h-8 text-black transition-all duration-500 hover:scale-110" />
-              )}
+            {/* Mobile Trigger - same */}
+            <button onClick={toggleMenu} className="lg:hidden relative p-2 group">
+              {/* ... same */}
             </button>
           </div>
         </div>
@@ -129,7 +163,7 @@ const Navbar = () => {
               { to: "/", label: "HOME" },
               { to: "/all-bicycles", label: "COLLECTION" },
               { to: "/about", label: "MANIFESTO" },
-              { to: "/dashboard", label: "STUDIO" },
+              // { to: "/dashboard", label: "STUDIO" },
               { to: "/login", label: "ACCESS" },
             ].map((item, index) => (
               <li

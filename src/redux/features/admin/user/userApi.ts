@@ -30,7 +30,18 @@ const usersApi = baseApi.injectEndpoints({
         invalidatesTags: ["Users"],
       }),
     }),
+    getMe: builder.query<TUser, void>({
+      query: () => ({
+        url: "/users/me",
+        method: "GET",
+      }),      
+      providesTags: ["Users"],
+    }),
   }),
 });
 
-export const { useGetUsersQuery, useUpdateUserMutation, useDeleteUserMutation  } = usersApi;
+
+
+
+
+export const { useGetUsersQuery, useUpdateUserMutation, useDeleteUserMutation, useGetMeQuery  } = usersApi;

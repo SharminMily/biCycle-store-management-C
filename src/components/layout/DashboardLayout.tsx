@@ -1,6 +1,6 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { logout, useCurrentToken } from "../../redux/features/auth/authSlice";
+import { logout, selectCurrentToken } from "../../redux/features/auth/authSlice";
 import { verifyToken } from "../../utils/verifyToken";
 import AdminRoutes from "../../routes/AdminRoutes";
 import UserRoutes from "../../routes/UserRoute";
@@ -14,7 +14,7 @@ const userRole = {
 
 const MainLayout = () => {
   const dispatch = useAppDispatch();
-  const token = useAppSelector(useCurrentToken);
+  const token = useAppSelector(selectCurrentToken);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   let user = null;

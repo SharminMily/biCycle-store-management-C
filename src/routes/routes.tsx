@@ -16,7 +16,7 @@ import ProtectedRoute from "../components/layout/ProtectedRoute";
 import MyHome from "../pages/dashboard/userDashboard/MyHome";
 import { useAppSelector } from "../redux/hooks";
 import { verifyToken } from "../utils/verifyToken";
-import { useCurrentToken } from "../redux/features/auth/authSlice";
+import { selectCurrentUser } from "../redux/features/auth/authSlice";
 import BicycleDetails from "../pages/homePage/BicycleDetails";
 import ManageOrder from "../pages/dashboard/userDashboard/ManageOrder";
 import OrderDetails from "../pages/dashboard/userDashboard/OrderDetails";
@@ -33,7 +33,7 @@ const userRole = {
 
 // Role-Based Route Component
 const DashboardRedirect = () => {
-  const token = useAppSelector(useCurrentToken);
+  const token = useAppSelector(selectCurrentUser);
   const user = token ? verifyToken(token) : null;
 
   if (!user) {
