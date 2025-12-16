@@ -1,16 +1,16 @@
-import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useGetProductsQuery } from "../../redux/features/admin/product/productApi";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { addToCart } from "../../redux/features/cart/cartSlice";
-import { RootState } from "../../redux/store";
+
 import { ShoppingBag } from "lucide-react"; // Optional: npm install lucide-react
 
 const BicycleDetails = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const cartItems = useSelector((state: RootState) => state.cart.items);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // const _cartItems = useSelector((state: RootState) => state.cart.items);
 
   const { data: products, isFetching, error } = useGetProductsQuery(undefined);
 

@@ -1,5 +1,3 @@
-import React from "react";
-
 const About = () => {
   return (
     <section className="relative py-20 px-6 overflow-hidden bg-gradient-to-b from-white to-gray-50">

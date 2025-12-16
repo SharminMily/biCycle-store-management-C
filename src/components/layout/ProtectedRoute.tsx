@@ -1,4 +1,4 @@
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import {
   logout,
   selectCurrentUser,
@@ -10,19 +10,18 @@ import { ReactNode } from "react";
 
 type TProtectedRoute = {
   children: ReactNode;
-  allowedRoles: string[]; // e.g., ["admin"] or ["user", "admin"]
+  allowedRoles: string[];
 };
 
 const ProtectedRoute = ({ children, allowedRoles }: TProtectedRoute) => {
   const dispatch = useAppDispatch();
+  const location = useLocation(); 
 
-  // Correct selectors
-  const token = useAppSelector(selectCurrentToken);        // ← This is the JWT string
-  const user = useAppSelector(selectCurrentUser);          // ← Decoded user from Redux
-  const isLoading = useAppSelector(selectAuthLoading);     // ← Important for refresh
+  const token = useAppSelector(selectCurrentToken);
+  const user = useAppSelector(selectCurrentUser);
+  const isLoading = useAppSelector(selectAuthLoading);
 
-  // Show nothing or a loader while verifying auth on app start
-  if (isLoading) {
+  if (token && isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
@@ -33,29 +32,28 @@ const ProtectedRoute = ({ children, allowedRoles }: TProtectedRoute) => {
     );
   }
 
-  // If no token → not logged in
-  if (!token) {
+    if (!token) {
     dispatch(logout());
-    return <Navigate to="/login" replace />;
+    return (
+      <Navigate
+        to="/login"
+        replace
+        state={{ from: location }} 
+      />
+    );
   }
 
-  // If no user in Redux state → something went wrong (token invalid or not set)
+  
   if (!user) {
     dispatch(logout());
     return <Navigate to="/login" replace />;
   }
 
-  // Role check
   if (!allowedRoles.includes(user.role)) {
-    // Option 1: Just redirect (user is logged in but not authorized)
-    return <Navigate to="/unauthorized" replace />; // or "/login" or home
-
-    // Option 2: If you want to force logout on wrong role:
-    // dispatch(logout());
-    // return <Navigate to="/login" replace />;
+    return <Navigate to="/unauthorized" replace />;
   }
 
-  // All good → render protected content
+
   return <>{children}</>;
 };
 

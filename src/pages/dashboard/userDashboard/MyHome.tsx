@@ -5,8 +5,7 @@ import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import {
   selectCurrentUser,
   selectAuthLoading,
-  setUser,
-  setLoading,
+  setUser, 
 } from "../../../redux/features/auth/authSlice";
 import { TUser } from "../../../redux/features/auth/authSlice";
 import {
@@ -22,6 +21,7 @@ import {
 import { format } from "date-fns";
 import { Navigate } from "react-router-dom";
 import { useGetMeQuery } from "../../../redux/features/admin/user/userApi";
+import { useEffect } from "react";
 
 
 const UserHome = () => {
@@ -38,9 +38,16 @@ const UserHome = () => {
   });
 
  
+useEffect(() => {
   if (meData?.data && reduxUser?._id !== meData.data._id) {
-    dispatch(setUser({ user: meData.data, token: localStorage.getItem("token") }));
+    dispatch(
+      setUser({
+        user: meData.data,
+        token: localStorage.getItem("token") || "",
+      })
+    );
   }
+}, [meData, reduxUser, dispatch]); 
 
 
   const isLoading = isLoadingRedux || isLoadingMe;
@@ -102,7 +109,7 @@ const UserHome = () => {
               Your Profile Dashboard
             </h2>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
+            <div className="grid grid-cols-1 lg:grid-cols-1 gap-10 lg:gap-16">
               {/* Left: Personal Info */}
               <div className="bg-gradient-to-br from-gray-50 to-white rounded-3xl p-8 shadow-inner border border-gray-200">
                 <div className="flex flex-col sm:flex-row items-center gap-8 mb-10">

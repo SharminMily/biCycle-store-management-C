@@ -6,8 +6,7 @@ import {
   Package, 
   Users, 
   ShoppingCart, 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  LogOut,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars  
   Settings
 } from "lucide-react";
 

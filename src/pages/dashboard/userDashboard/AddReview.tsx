@@ -17,7 +17,7 @@ const AddReview = () => {
     }
 
     // Simulate submission
-    console.log({ name, rating, review });
+    // console.log({ name, rating, review });
     toast.success("Thank you! Your review has been submitted.");
 
     // Reset form

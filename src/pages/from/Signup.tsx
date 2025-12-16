@@ -1,9 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { toast } from "sonner";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { FieldValues, useForm } from "react-hook-form";
 import { useSignUpMutation } from "../../redux/features/auth/authApi";
 import { ArrowLeft } from "lucide-react";
+import { setUser } from "../../redux/features/auth/authSlice";
+import { useAppDispatch } from "../../redux/hooks";
 
 type SignUpFormData = {
   name: string;
@@ -14,30 +16,59 @@ type SignUpFormData = {
 
 const Signup = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const dispatch = useAppDispatch();
+
   const { register, handleSubmit, formState: { errors } } = useForm<SignUpFormData>();
-  const [signUp] = useSignUpMutation();
+  const [signUp ] = useSignUpMutation();
 
-  const onSubmit = async (data: FieldValues) => {
-    const toastId = toast.loading("Signing up...");
+const from = (location.state as { from?: { pathname: string } })?.from?.pathname || "/dashboard/myHome";
 
-    try {
-      const userInfo = {
-        name: data.name,
-        email: data.email,
-        password: data.password,
-        image: data.image,
-      };
+const onSubmit = async (data: FieldValues) => {
+  const toastId = toast.loading("Creating your account...");
 
-      const res = await signUp(userInfo).unwrap();
-      console.log("res", res);
+  try {
+    const userInfo = {
+      name: data.name,
+      email: data.email,
+      password: data.password,
+      image: data.image || undefined,
+    };
 
-      toast.success("Signup successful! Please login.", { id: toastId });
-      navigate("/login");
-    } catch (err: any) {
-      console.error("Signup Error:", err);
-      toast.error("Something went wrong....", { id: toastId });
+    const res = await signUp(userInfo).unwrap();
+    // console.log("Signup response:", res);
+
+    // ঠিক করা extraction – তোমার response structure অনুযায়ী
+    const token = res?.token || res?.data?.accessToken;  // token field বা data.accessToken
+    const user = res?.data?.user || res?.result;  // data.user বা result (user object)
+
+    if (token && user) {
+      // Redux-এ সেভ
+      dispatch(setUser({ user, token }));
+
+      // localStorage-এ সেভ
+      localStorage.setItem("token", token);
+
+      toast.success(`Welcome, ${user.name}! You're now logged in.`, {
+        id: toastId,
+        duration: 4000,
+      });
+
+      // Previous page বা dashboard এ যাও
+      navigate(from, { replace: true });
+    } else {
+      // যদি এখনো না আসে (debug এর জন্য)
+      // console.error("Token/User not found in response:", res);
+      toast.error("Signup successful but login failed. Please login manually.", { id: toastId });
+      navigate("/login", { state: { from: location } });
     }
-  };
+  } catch (err: any) {
+    console.error("Signup Error:", err);
+    const errorMessage = err?.data?.message || "Signup failed. Please try again.";
+    toast.error(errorMessage, { id: toastId });
+  }
+};
+
 
   return (
     <div className="min-h-screen bg-white flex items-center justify-center px-4 relative overflow-hidden">

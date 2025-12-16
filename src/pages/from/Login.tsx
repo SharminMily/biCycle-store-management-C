@@ -4,47 +4,52 @@ import { useLoginMutation } from "../../redux/features/auth/authApi";
 import { useAppDispatch } from "../../redux/hooks";
 import { setUser, TUser } from "../../redux/features/auth/authSlice";
 import { verifyToken } from "../../utils/verifyToken";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { ArrowLeft } from "lucide-react";
 
 const Login = () => {
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const { register, handleSubmit } = useForm();
-  const [login] = useLoginMutation();
+const navigate = useNavigate();
+const location = useLocation();
+const dispatch = useAppDispatch();
+const { register, handleSubmit } = useForm();
+const [login] = useLoginMutation();
 
-  const onSubmit = async (data: FieldValues) => {
-    const toastId = toast.loading("Logging in...");
+const onSubmit = async (data: FieldValues) => {
+  const toastId = toast.loading("Logging in...");
 
-    try {
-      const userInfo = {
-        email: data.email,
-        password: data.password,
-      };
+  try {
+    const userInfo = {
+      email: data.email,
+      password: data.password,
+    };
 
-      const res = await login(userInfo).unwrap();
+    const res = await login(userInfo).unwrap();
 
-      const user = verifyToken(res.data.accessToken) as TUser;
+   
+    const user = verifyToken(res.data.accessToken) as TUser;
 
-      dispatch(
-        setUser({
-          user,
-          token: res.data.accessToken,
-        })
-      );
+   
+    dispatch(
+      setUser({
+        user,
+        token: res.data.accessToken,
+      })
+    );
 
-      toast.success("Login successful!", { id: toastId, duration: 2000 });
+  
+    toast.success("Login successful!", { id: toastId, duration: 2000 });
 
-      if (user.role === "admin") {
-        navigate("/dashboard/adminHome");
-      } else {
-        navigate("/dashboard/myHome");
-      }
-    } catch (err) {
-      toast.error("Something went wrong...", { id: toastId, duration: 2000 });
-    }
-  };
+    
+    const from = (location.state as { from: Location })?.from?.pathname || "/";
+
+    navigate(from, { replace: true });
+  } catch (err) {
+    toast.error("Invalid email or password", { id: toastId, duration: 3000 });
+    
+    console.error("Login error:", err);
+  }
+};
 
   return (
     <div className="min-h-screen bg-white flex items-center justify-center px-4 relative overflow-hidden">

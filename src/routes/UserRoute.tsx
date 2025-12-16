@@ -1,7 +1,7 @@
 import { Divider } from "primereact/divider";
 import { NavLink } from "react-router-dom";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { Home, Package, Star, Info, Bike, LogOut } from "lucide-react";
+import { Home, Package, Star, Info, Bike } from "lucide-react";
 
 type UserRoutesProps = {
   isOpen: boolean;

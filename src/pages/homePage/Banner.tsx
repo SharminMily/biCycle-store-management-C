@@ -1,4 +1,3 @@
-import React from "react";
 import { Carousel } from "primereact/carousel";
 
 const banners = [
@@ -31,7 +30,7 @@ const Banner = () => {
             {/* Headline with Digital Glitch-style Animation */}
             <div className="overflow-hidden">
               <h1 className="text-6xl md:text-7xl lg:text-8xl font-black tracking-tighter text-black leading-none">
-                <span className="inline-block animate-fade-up">BYCICLE</span>
+                <span className="inline-block animate-fade-up">BICYCLE</span>
                 <br />
                 <span className="inline-block text-red-600 animate-fade-up animation-delay-200">STUDIO</span>
               </h1>

@@ -5,252 +5,214 @@ import {
   updateQuantity,
 } from "../../redux/features/cart/cartSlice";
 import { Button } from "primereact/button";
-import { useEffect } from "react";
+import { Card } from "primereact/card";
+import { Divider } from "primereact/divider";
+import { Toast } from "primereact/toast";
+import { useEffect, useRef } from "react";
 import { toast } from "sonner";
 
 const Checkout = () => {
   const dispatch = useAppDispatch();
+  const toastRef = useRef<Toast>(null);
 
   const cartData = useAppSelector((state) => state.cart);
-
-  console.log("Cart data in Checkout:", cartData);
-  const [createOrder, { isLoading, isSuccess, data, isError, error }] =
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [createOrder, { isLoading, isError, error }] =
     useCreateOrderMutation();
-  // console.log(createOrder)
 
   const handlePlaceOrder = async () => {
+    if (cartData.items.length === 0) {
+      toast.error("Your cart is empty!");
+      return;
+    }
+
     try {
       const response = await createOrder({ products: cartData.items }).unwrap();
 
-      console.log("🟢 Full Order Response:", response);
+      const checkoutUrl = response?.data?.checkout_url || response?.checkout_url;
 
-      // Extract checkout URL properly
-      const checkoutUrl =
-        response?.data?.checkout_url || response?.checkout_url;
-
-      console.log("🔵 Extracted Checkout URL:", checkoutUrl); // Print extracted URL
-
-      if (typeof checkoutUrl === "string" && checkoutUrl.startsWith("http")) {
-        console.log("✅ Redirecting to:", checkoutUrl);
-        window.location.href = checkoutUrl;
+      if (checkoutUrl && typeof checkoutUrl === "string" && checkoutUrl.startsWith("http")) {
+        toast.success("Order created! Redirecting to payment...");
+        setTimeout(() => {
+          window.location.href = checkoutUrl;
+        }, 1500);
       } else {
-        console.error("❌ Invalid checkout URL received:", checkoutUrl);
-        toast.error("Invalid checkout URL! Check console for details.");
+        throw new Error("Invalid checkout URL");
       }
-    } catch (err) {
-      console.error("❌ Order creation error:", err);
-      toast.error("Order creation failed!");
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      console.error("Order creation failed:", err);
+      toast.error(err?.data?.message || "Failed to create order. Please try again.");
     }
   };
-  const toastId = "cart";
-  useEffect(() => {
-    if (isLoading) toast.loading("loading ...", { id: toastId });
 
-    if (data?.data?.checkout_url) {
-      console.log("Redirecting to:", data.data.checkout_url); // Log URL
-      setTimeout(() => {
-        window.location.href = data.data.checkout_url;
-      }, 1000);
+  // Handle loading and error toasts
+  useEffect(() => {
+    if (isLoading) {
+      toast.loading("Processing your order...", { id: "order" });
     } else {
-      console.error("checkout_url is missing in API response");
-      toast.error("Payment URL not found. Try again.");
+      toast.dismiss("order");
     }
 
-    if (isError) toast.error(JSON.stringify(error), { id: toastId });
-  }, [data?.data, data?.message, error, isError, isLoading, isSuccess]);
+    if (isError && error) {
+      toast.error("Something went wrong. Please try again.");
+    }
+  }, [isLoading, isError, error]);
+
+  const subtotal = cartData.totalPrice.toFixed(2);
+  const shipping = cartData.totalPrice > 100 ? 0 : 10; // Example: Free shipping over $100
+  const total = (parseFloat(subtotal) + shipping).toFixed(2);
 
   return (
-    <div className="max-w-5xl mx-auto mt-20">
-      <div className="flex-1 p-12 rounded-b-md text-black bg-[#020227] overflow-y-auto">
-        {cartData.items.length > 0 ? (
-          <ul className="space-y-4">
-            {cartData.items.map((item) => (
-              <li
-                key={item.product}
-                className="flex  justify-between items-center gap-4"
-              >
-                <div className="flex justify-between items-center gap-40">
-                  <div className="">
-                    <img
-                      src={item.image}
-                      alt={item.name}
-                      className="h-16 w-16 rounded object-cover"
-                    />
+    <>
+      <Toast ref={toastRef} />
+
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-12 px-4">
+        <div className="max-w-6xl mx-auto">
+          <h1 className="text-4xl font-bold text-center text-gray-800 mb-10">
+            Checkout
+          </h1>
+
+          {cartData.items.length === 0 ? (
+            <Card className="text-center py-16">
+              <i className="pi pi-shopping-cart text-6xl text-gray-300 mb-4" />
+              <p className="text-xl text-gray-600">Your cart is empty</p>
+              <Button
+                label="Continue Shopping"
+                icon="pi pi-arrow-left"
+                className="mt-6"
+                link
+                onClick={() => window.history.back()}
+              />
+            </Card>
+          ) : (
+            <div className="grid lg:grid-cols-3 gap-8">
+              {/* Cart Items */}
+              <div className="lg:col-span-2">
+                <Card className="shadow-xl">
+                  <h2 className="text-2xl font-semibold mb-6 text-gray-800">
+                    Your Items ({cartData.totalQuantity})
+                  </h2>
+
+                  <div className="space-y-6">
+                    {cartData.items.map((item) => (
+                      <div
+                        key={item.product}
+                        className="flex items-center gap-6 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition"
+                      >
+                        <img
+                          src={item.image || "/placeholder.jpg"}
+                          alt={item.name}
+                          className="w-24 h-24 object-cover rounded-lg shadow-md"
+                        />
+
+                        <div className="flex-1">
+                          <h3 className="font-semibold text-lg text-gray-800">
+                            {item.name}
+                          </h3>
+                          <p className="text-sm text-gray-500 mt-1">
+                            In stock: {item.stock}
+                          </p>
+
+                          <div className="flex items-center gap-3 mt-3">
+                            <Button
+                              icon="pi pi-minus"
+                              className="p-button-rounded p-button-outlined p-button-sm"
+                              onClick={() =>
+                                dispatch(
+                                  updateQuantity({
+                                    id: item.product,
+                                    quantity: Math.max(item.quantity - 1, 1),
+                                  })
+                                )
+                              }
+                              disabled={item.quantity <= 1}
+                            />
+                            <span className="font-medium text-lg w-12 text-center">
+                              {item.quantity}
+                            </span>
+                            <Button
+                              icon="pi pi-plus"
+                              className="p-button-rounded p-button-outlined p-button-sm"
+                              onClick={() =>
+                                dispatch(
+                                  updateQuantity({
+                                    id: item.product,
+                                    quantity: Math.min(item.quantity + 1, item.stock),
+                                  })
+                                )
+                              }
+                              disabled={item.quantity >= item.stock}
+                            />
+                          </div>
+                        </div>
+
+                        <div className="text-right">
+                          <p className="text-xl font-bold text-gray-800">
+                            ${(item.price * item.quantity).toFixed(2)}
+                          </p>
+                          <button
+                            onClick={() => dispatch(removeFromCart(item.product))}
+                            className="text-red-600 text-sm hover:underline mt-2 inline-block"
+                          >
+                            Remove
+                          </button>
+                        </div>
+                      </div>
+                    ))}
                   </div>
+                </Card>
+              </div>
 
-                  <div className="flex-1">
-                    <h4 className="text-sm font-medium">{item.name}</h4>
+              {/* Order Summary */}
+              <div className="lg:col-span-1">
+                <Card className="shadow-xl sticky top-6">
+                  <h2 className="text-2xl font-semibold mb-6 text-gray-800">
+                    Order Summary
+                  </h2>
 
-                    <div className="flex items-center gap-2 mt-1">
-                      <button
-                        onClick={() =>
-                          dispatch(
-                            updateQuantity({
-                              id: item.product,
-                              quantity: Math.max(item.quantity - 1, 1),
-                            })
-                          )
-                        }
-                        className="w-6 h-6 bg-gray-200 text-black rounded hover:bg-gray-300"
-                      >
-                        -
-                      </button>
-                      <span className="text-sm font-medium">
-                        {item.quantity}
-                      </span>
-
-                      <button
-                        onClick={() =>
-                          dispatch(
-                            updateQuantity({
-                              id: item.product,
-                              quantity: Math.min(item.quantity + 1, item.stock),
-                            })
-                          )
-                        }
-                        className="w-6 h-6 bg-gray-200 text-black rounded hover:bg-gray-300"
-                      >
-                        +
-                      </button>
+                  <div className="space-y-4">
+                    <div className="flex justify-between text-gray-700">
+                      <span>Subtotal</span>
+                      <span className="font-medium">${subtotal}</span>
                     </div>
+
+                    <div className="flex justify-between text-gray-700">
+                      <span>Shipping</span>
+                      <span className={shipping === 0 ? "text-green-600" : ""}>
+                        {shipping === 0 ? "Free" : `$${shipping}`}
+                      </span>
+                    </div>
+
+                    <Divider />
+
+                    <div className="flex justify-between text-xl font-bold text-gray-800">
+                      <span>Total</span>
+                      <span>${total}</span>
+                    </div>
+
+                    {shipping === 0 && (
+                      <p className="text-sm text-green-600 text-center mt-2">
+                        🎉 Free shipping applied!
+                      </p>
+                    )}
                   </div>
-                </div>
 
-                <div className="">
-                  <p className="text-sm font-semibold text-black">
-                    ${(item.quantity * item.price).toFixed(2)}
-                  </p>
-                  <button
-                    onClick={() => dispatch(removeFromCart(item.product))}
-                    className="text-red-600 text-sm hover:underline"
-                  >
-                    Remove
-                  </button>
-                </div>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p className="text-center text-gray-500">Your cart is empty.</p>
-        )}
-
-        <div className="border-b my-3"></div>
-
-        <div className="flex justify-between items-center mb-4">
-          <span className="text-sm font-medium text-black">
-            Total Quantity:
-          </span>
-          <span className="text-lg font-bold">{cartData.totalQuantity}</span>
-        </div>
-        <div className="flex justify-between items-center mb-4">
-          <span className="text-sm font-medium text-black">Total Price:</span>
-          <span className="text-lg font-bold">
-            ${cartData.totalPrice.toFixed(2)}
-          </span>
+                  <Button
+                    label={isLoading ? "Processing..." : "Place Order"}
+                    icon={isLoading ? "pi pi-spin pi-spinner" : "pi pi-lock"}
+                    className="w-full mt-8 p-button-lg p-button-success"
+                    onClick={handlePlaceOrder}
+                    disabled={isLoading || cartData.items.length === 0}
+                  />
+                </Card>
+              </div>
+            </div>
+          )}
         </div>
       </div>
-      <Button
-        className="w-full"
-        onClick={() => {
-          console.log("Button Clicked!"); // ✅ Debug Click
-          handlePlaceOrder();
-        }}
-      >
-        Place Order
-      </Button>
-    </div>
+    </>
   );
 };
 
 export default Checkout;
-
-// import { useState, useEffect } from "react";
-
-// const Checkout = () => {
-//   const [cart, setCart] = useState([]);
-//   const [error, setError] = useState(null);
-
-//   // ✅ Cart Load from Local Storage
-//   useEffect(() => {
-//     const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
-//     setCart(storedCart);
-//   }, []);
-
-//   // ✅ Quantity Update Function
-//   const updateQuantity = (id, newQuantity, stock) => {
-//     if (newQuantity < 1) return; // Negative quantity prevent
-
-//     if (newQuantity > stock) {
-//       setError(`❌ Stock Limit Reached! Only ${stock} Available.`);
-//       return;
-//     }
-
-//     setError(null); // ✅ Clear Error
-
-//     const updatedCart = cart.map((item) =>
-//       item.id === id ? { ...item, quantity: newQuantity } : item
-//     );
-
-//     setCart(updatedCart);
-//     localStorage.setItem("cart", JSON.stringify(updatedCart)); // ✅ Update Local Storage
-//   };
-
-//   // ✅ Total Price Calculation
-//   const totalPrice = cart.reduce((total, item) => total + item.price * item.quantity, 0);
-
-//   return (
-//     <div className="p-6 mx-20 bg-gray-900 text-black min-h-screen">
-//       <h1 className="text-3xl font-bold mb-4">Checkout</h1>
-
-//       {/* ✅ Show Error if Stock is Exceeded */}
-//       {error && <p className="text-red-500 font-bold">{error}</p>}
-
-//       {cart.length === 0 ? (
-//         <p className="text-gray-300">No items in cart</p>
-//       ) : (
-//         <div>
-//           {cart.map((item) => (
-//             <div key={item.id} className="border-b pb-4 mb-4 flex justify-between items-center">
-//               <div>
-//                 <h2 className="text-xl">{item.name}</h2>
-//                 <p>Price: ${item.price}</p>
-//                 <p className="text-yellow-400">Stock: {item.stock}</p> {/* ✅ Show Stock */}
-//               </div>
-
-//               {/* ✅ Quantity Control */}
-//               <div className="flex items-center">
-//                 <button
-//                   onClick={() => updateQuantity(item.id, item.quantity - 1, item.stock)}
-//                   className="bg-red-500 px-3 py-1 rounded-l"
-//                 >
-//                   -
-//                 </button>
-//                 <span className="px-4 py-2 bg-gray-700">{item.quantity}</span>
-//                 <button
-//                   onClick={() => updateQuantity(item.id, item.quantity + 1, item.stock)}
-//                   className={`px-3 py-1 rounded-r ${
-//                     item.quantity >= item.stock ? "bg-gray-600 cursor-not-allowed" : "bg-green-500"
-//                   }`}
-//                   disabled={item.quantity >= item.stock} // ✅ Disable Button if Stock Exceeded
-//                 >
-//                   +
-//                 </button>
-//               </div>
-
-//               {/* ✅ Dynamic Total Price per Item */}
-//               <p>Total: ${item.price * item.quantity}</p>
-//             </div>
-//           ))}
-
-//           {/* ✅ Overall Total Price */}
-//           <h2 className="text-2xl font-bold mt-4">Total Price: ${totalPrice}</h2>
-//           <button className="bg-blue-500 px-6 py-2 mt-4 rounded" onClick={() => alert("Proceed to Payment")}>
-//             Proceed to Payment
-//           </button>
-//         </div>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default Checkout;

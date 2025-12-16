@@ -12,7 +12,7 @@ import {
   useGetUsersQuery,
   useUpdateUserMutation,
 } from "../../../redux/features/admin/user/userApi";
-import { Badge } from "primereact/badge";
+
 
 const AllUser = () => {
   const { data: users, isLoading, refetch } = useGetUsersQuery(undefined);

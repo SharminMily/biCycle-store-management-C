@@ -14,9 +14,9 @@ import AddBicycle from "../pages/dashboard/adminDashboard/AddBicycle";
 import AllUser from "../pages/dashboard/adminDashboard/AllUser";
 import ProtectedRoute from "../components/layout/ProtectedRoute";
 import MyHome from "../pages/dashboard/userDashboard/MyHome";
-import { useAppSelector } from "../redux/hooks";
-import { verifyToken } from "../utils/verifyToken";
-import { selectCurrentUser } from "../redux/features/auth/authSlice";
+// import { useAppSelector } from "../redux/hooks";
+// import { verifyToken } from "../utils/verifyToken";
+// import { selectCurrentUser } from "../redux/features/auth/authSlice";
 import BicycleDetails from "../pages/homePage/BicycleDetails";
 import ManageOrder from "../pages/dashboard/userDashboard/ManageOrder";
 import OrderDetails from "../pages/dashboard/userDashboard/OrderDetails";
@@ -24,6 +24,7 @@ import AddReview from "../pages/dashboard/userDashboard/AddReview";
 import Orders from "../pages/dashboard/adminDashboard/Orders";
 import Checkout from "../pages/homePage/Checkout";
 import VerifyOrder from "../pages/homePage/VerifyOrder";
+import { verifyToken } from "../utils/verifyToken";
 
 // User Role Constants
 const userRole = {
@@ -33,19 +34,19 @@ const userRole = {
 
 // Role-Based Route Component
 const DashboardRedirect = () => {
-  const token = useAppSelector(selectCurrentUser);
-  const user = token ? verifyToken(token) : null;
+  const token = localStorage.getItem("token");
+  const decodedUser = token ? verifyToken(token) : null;
 
-  if (!user) {
+  if (!decodedUser) {
     return <Navigate to="/login" replace />;
   }
 
-  return user.role === userRole.Admin ? (
+  return decodedUser.role === userRole.Admin ? (
     <Navigate to="/dashboard/adminHome" replace />
   ) : (
     <Navigate to="/dashboard/myHome" replace />
   );
-};
+}
 ///checkout?bicycles=${bicycle._id}
 // Define Routes
 const router = createBrowserRouter([
