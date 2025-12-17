@@ -97,7 +97,7 @@ const Navbar = () => {
               {[
                 { to: "/", label: "HOME" },
                 { to: "/all-bicycles", label: "COLLECTION" },
-                { to: "/about", label: "MANIFESTO" },
+                { to: "/about", label: "VISION" },
               ].map((item) => (
                 <li key={item.to} className="flex-shrink-0">
                   <NavLink

@@ -1,4 +1,5 @@
 import { Carousel } from "primereact/carousel";
+import { Link } from "react-router-dom";
 
 const banners = [
   "https://i.ibb.co.com/4ZmNst0h/1738248885539-fotor-bg-remover-202501302158.png",
@@ -42,14 +43,21 @@ const Banner = () => {
 
             {/* Luxury CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-6 justify-center lg:justify-start">
-              <button className="group relative px-12 py-5 bg-black text-white font-bold text-lg uppercase tracking-widest rounded-full overflow-hidden transition-all duration-500 hover:shadow-2xl hover:shadow-black/30">
-                <span className="relative z-10">Discover Now</span>
-                <span className="absolute inset-0 bg-gradient-to-r from-red-600 to-green-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              </button>
+             <Link to="/about">
+        <button className="group relative px-12 py-5 bg-black text-white font-bold text-lg uppercase tracking-widest rounded-full overflow-hidden transition-all duration-500 hover:shadow-2xl hover:shadow-black/30">
+          <span className="relative z-10">THE VISION</span>
+          <span className="absolute inset-0 bg-gradient-to-r from-red-600 to-green-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+        </button>
+      </Link>
 
-              <button className="px-12 py-5 border-2 border-black text-black font-bold text-lg uppercase tracking-widest rounded-full hover:bg-black hover:text-white transition-all duration-500">
-                Exclusive Drop
-              </button>
+     
+      <Link to="/all-bicycles">
+       <button className="px-12 py-5 border-2 border-black text-black font-bold text-lg uppercase tracking-widest rounded-full hover:bg-black hover:text-white transition-all duration-500">
+          <span className="relative z-10">COLLECTION</span>
+          <span className="absolute inset-0 bg-gradient-to-r from-red-600 to-green-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+        </button>
+      
+      </Link>
             </div>
 
             {/* Minimal Stats - Editorial Style */}

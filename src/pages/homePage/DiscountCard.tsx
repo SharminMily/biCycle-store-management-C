@@ -31,21 +31,21 @@ const DiscountCard = () => {
               </div>
 
               {/* Subtle Price */}
-              <div className="absolute top-4 right-4 bg-green-600 text-white text-2xl font-bold px-5 py-2 rounded-full">
+              {/* <div className="absolute top-4 right-4 bg-green-600 text-white text-2xl font-bold px-5 py-2 rounded-full">
                 $120
-              </div>
+              </div> */}
             </div>
 
             <div className="p-8 text-center space-y-4">
               <h3 className="text-2xl font-bold text-black">
-                Pink City Rider
+                Pink City Perfect Rider
               </h3>
               <p className="text-gray-600">
                 Perfect for casual rides with a stylish basket and comfortable seat.
               </p>
 
               <button className="w-full mt-6 py-3 bg-black text-white font-medium rounded-lg hover:bg-gray-900 transition-colors duration-300">
-                Buy Now
+                $120
               </button>
             </div>
           </div>
@@ -64,9 +64,9 @@ const DiscountCard = () => {
                 20% OFF
               </div>
 
-              <div className="absolute top-4 right-4 bg-green-600 text-white text-2xl font-bold px-5 py-2 rounded-full">
+              {/* <div className="absolute top-4 right-4 bg-green-600 text-white text-2xl font-bold px-5 py-2 rounded-full">
                 $120
-              </div>
+              </div> */}
             </div>
 
             <div className="p-8 text-center space-y-4">
@@ -78,7 +78,7 @@ const DiscountCard = () => {
               </p>
 
               <button className="w-full mt-6 py-3 bg-black text-white font-medium rounded-lg hover:bg-gray-900 transition-colors duration-300">
-                Buy Now
+                $999
               </button>
             </div>
           </div>
@@ -97,9 +97,9 @@ const DiscountCard = () => {
                 20% OFF
               </div>
 
-              <div className="absolute top-4 right-4 bg-green-600 text-white text-2xl font-bold px-5 py-2 rounded-full">
+              {/* <div className="absolute top-4 right-4 bg-green-600 text-white text-2xl font-bold px-5 py-2 rounded-full">
                 $120
-              </div>
+              </div> */}
             </div>
 
             <div className="p-8 text-center space-y-4">
@@ -111,7 +111,7 @@ const DiscountCard = () => {
               </p>
 
               <button className="w-full mt-6 py-3 bg-black text-white font-medium rounded-lg hover:bg-gray-900 transition-colors duration-300">
-                Buy Now
+                $399
               </button>
             </div>
           </div>
