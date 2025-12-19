@@ -26,7 +26,6 @@ import Checkout from "../pages/homePage/Checkout";
 import VerifyOrder from "../pages/homePage/VerifyOrder";
 import { verifyToken } from "../utils/verifyToken";
 
-// User Role Constants
 const userRole = {
   Admin: "admin",
   User: "user",
@@ -48,7 +47,6 @@ const DashboardRedirect = () => {
   );
 }
 ///checkout?bicycles=${bicycle._id}
-// Define Routes
 const router = createBrowserRouter([
   {
     path: "/",
@@ -81,7 +79,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <DashboardRedirect />, // Redirect to correct dashboard based on role
+        element: <DashboardRedirect />, 
       },
       {
         path: "adminHome",

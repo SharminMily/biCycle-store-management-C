@@ -49,7 +49,6 @@ const Banner = () => {
           <span className="absolute inset-0 bg-gradient-to-r from-red-600 to-green-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
         </button>
       </Link>
-
      
       <Link to="/all-bicycles">
        <button className="px-12 py-5 border-2 border-black text-black font-bold text-lg uppercase tracking-widest rounded-full hover:bg-black hover:text-white transition-all duration-500">
