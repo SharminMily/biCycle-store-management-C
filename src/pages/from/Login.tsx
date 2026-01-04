@@ -25,29 +25,40 @@ const onSubmit = async (data: FieldValues) => {
     };
 
     const res = await login(userInfo).unwrap();
+    console.log("Login response:", res); // এটা দেখো কী আসছে
 
-   
-    const user = verifyToken(res.data.accessToken) as TUser;
+    // Flexible token extraction — signup-এর মতোই
+    const token = res?.token || res?.data?.accessToken || res?.accessToken;
+    
+    if (!token) {
+      throw new Error("No token received from server");
+    }
 
-   
-    dispatch(
-      setUser({
-        user,
-        token: res.data.accessToken,
-      })
-    );
+    // User extract করার চেষ্টা
+    let user: TUser;
+    if (res?.data?.user) {
+      user = res.data.user;
+    } else if (res?.user) {
+      user = res.user;
+    } else {
+      // যদি user object না থাকে তাহলে token থেকে decode করো
+      user = verifyToken(token) as TUser;
+    }
 
-  
+    dispatch(setUser({ user, token }));
+
+    // Optional: localStorage-এও রাখতে পারো (signup-এ যেমন করেছ)
+    localStorage.setItem("token", token);
+
     toast.success("Login successful!", { id: toastId, duration: 2000 });
 
-    
-    const from = (location.state as { from: Location })?.from?.pathname || "/";
-
+    const from = (location.state as { from?: { pathname: string } })?.from?.pathname || "/dashboard/myHome";
     navigate(from, { replace: true });
-  } catch (err) {
-    toast.error("Invalid email or password", { id: toastId, duration: 3000 });
-    
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (err: any) {
     console.error("Login error:", err);
+    toast.error(err?.data?.message || "Invalid email or password", { id: toastId });
   }
 };
 

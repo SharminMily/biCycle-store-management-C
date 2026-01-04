@@ -37,27 +37,21 @@ const onSubmit = async (data: FieldValues) => {
 
     const res = await signUp(userInfo).unwrap();
     // console.log("Signup response:", res);
+  
+    const token = res?.token || res?.data?.accessToken;  
+    const user = res?.data?.user || res?.result;  
 
-    // ঠিক করা extraction – তোমার response structure অনুযায়ী
-    const token = res?.token || res?.data?.accessToken;  // token field বা data.accessToken
-    const user = res?.data?.user || res?.result;  // data.user বা result (user object)
-
-    if (token && user) {
-      // Redux-এ সেভ
+    if (token && user) {     
       dispatch(setUser({ user, token }));
-
-      // localStorage-এ সেভ
+      
       localStorage.setItem("token", token);
-
       toast.success(`Welcome, ${user.name}! You're now logged in.`, {
         id: toastId,
         duration: 4000,
       });
-
-      // Previous page বা dashboard এ যাও
+      
       navigate(from, { replace: true });
     } else {
-      // যদি এখনো না আসে (debug এর জন্য)
       // console.error("Token/User not found in response:", res);
       toast.error("Signup successful but login failed. Please login manually.", { id: toastId });
       navigate("/login", { state: { from: location } });
