@@ -2,16 +2,9 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { RootState } from "../store";
 import { logout } from "../features/auth/authSlice";
 
-// const getBaseUrl = () => {
-//   return import.meta.env.VITE_NODE_ENV === "production"
-//     ? "https://bicycle-store-backend-murex.vercel.app/api"
-//     : "http://localhost:5000/";
-// };
-//https://bicycle-store-backend-murex.vercel.app
-
-//https://bicycle-store-backend-murex.vercel.app/api
+// "https://bicycle-store-backend-murex.vercel.app/api/"
 const baseQuery = fetchBaseQuery({
-  baseUrl: "https://bicycle-store-backend-murex.vercel.app/api/" ,
+  baseUrl: "http://localhost:5000/api/" ,
   credentials: "include", 
   prepareHeaders: (headers, { getState }) => {
     const token = (getState() as RootState).auth.token;

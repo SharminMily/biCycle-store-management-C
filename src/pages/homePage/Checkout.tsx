@@ -26,24 +26,30 @@ const Checkout = () => {
       return;
     }
 
-    try {
-      const response = await createOrder({ products: cartData.items }).unwrap();
+  try {
+  const response = await createOrder({ products: cartData.items }).unwrap();
+  const checkoutUrl = response?.checkout_url ?? response?.data?.checkout_url;
 
-      const checkoutUrl = response?.data?.checkout_url || response?.checkout_url;
+  if (!checkoutUrl?.startsWith("http")) {
+    throw new Error("No valid checkout URL received");
+  }
 
-      if (checkoutUrl && typeof checkoutUrl === "string" && checkoutUrl.startsWith("http")) {
-        toast.success("Order created! Redirecting to payment...");
-        setTimeout(() => {
-          window.location.href = checkoutUrl;
-        }, 1500);
-      } else {
-        throw new Error("Invalid checkout URL");
-      }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      console.error("Order creation failed:", err);
-      toast.error(err?.data?.message || "Failed to create order. Please try again.");
-    }
+  toast.success("Order created! Redirecting...");
+  setTimeout(() => window.location.href = checkoutUrl, 1200);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+} catch (err: any) {
+  console.error(err);
+  let msg = "Failed to create order";
+  if (err.status === 'PARSING_ERROR' && err.originalStatus === 404) {
+    msg = "Backend route not found (404) — wrong URL?";
+  } else if (err.data?.message) {
+    msg = err.data.message;
+  }
+  toast.error(msg);
+}
+
+
+
   };
 
   // Handle loading and error toasts

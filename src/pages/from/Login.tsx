@@ -25,9 +25,9 @@ const onSubmit = async (data: FieldValues) => {
     };
 
     const res = await login(userInfo).unwrap();
-    console.log("Login response:", res); // এটা দেখো কী আসছে
+    console.log("Login response:", res); 
 
-    // Flexible token extraction — signup-এর মতোই
+    // Flexible token extraction — signup-
     const token = res?.token || res?.data?.accessToken || res?.accessToken;
     
     if (!token) {
