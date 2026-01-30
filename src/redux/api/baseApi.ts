@@ -4,7 +4,7 @@ import { logout } from "../features/auth/authSlice";
 
 // "https://bicycle-store-backend-murex.vercel.app/api/"
 const baseQuery = fetchBaseQuery({
-  baseUrl: "http://localhost:5000/api/" ,
+  baseUrl: "https://bicycle-store-backend-murex.vercel.app/api/" ,
   credentials: "include", 
   prepareHeaders: (headers, { getState }) => {
     const token = (getState() as RootState).auth.token;
