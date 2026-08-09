@@ -69,7 +69,7 @@ const router = createBrowserRouter([
       { path: "about", element: <About /> },
     ],
   },
-  
+
   { path: "/login", element: <Login /> },
   { path: "/signUp", element: <Signup /> },
 
@@ -79,13 +79,13 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <DashboardRedirect />, 
+        element: <DashboardRedirect />,
       },
       {
         path: "adminHome",
         element: (
           <ProtectedRoute allowedRoles={[userRole.Admin]}>
-            <AdminHome />,
+            <AdminHome />
           </ProtectedRoute>
         ),
       },
@@ -109,7 +109,7 @@ const router = createBrowserRouter([
         path: "orders",
         element: (
           <ProtectedRoute allowedRoles={[userRole.Admin]}>
-            element: <Orders />,
+            <Orders />
           </ProtectedRoute>
         ),
       },
@@ -117,7 +117,7 @@ const router = createBrowserRouter([
         path: "all-users",
         element: (
           <ProtectedRoute allowedRoles={[userRole.Admin]}>
-            element: <AllUser />,
+            <AllUser />
           </ProtectedRoute>
         ),
       },

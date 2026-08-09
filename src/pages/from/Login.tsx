@@ -34,20 +34,20 @@ const onSubmit = async (data: FieldValues) => {
       throw new Error("No token received from server");
     }
 
-    // User extract করার চেষ্টা
+    // User extract 
     let user: TUser;
     if (res?.data?.user) {
       user = res.data.user;
     } else if (res?.user) {
       user = res.user;
     } else {
-      // যদি user object না থাকে তাহলে token থেকে decode করো
+      
       user = verifyToken(token) as TUser;
     }
 
     dispatch(setUser({ user, token }));
 
-    // Optional: localStorage-এও রাখতে পারো (signup-এ যেমন করেছ)
+   
     localStorage.setItem("token", token);
 
     toast.success("Login successful!", { id: toastId, duration: 2000 });

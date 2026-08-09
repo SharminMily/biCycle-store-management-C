@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface ICartItem {
   id: string;
-    product: string; // Product ID
+    product: string; 
     name: string;
     price: number;
     quantity: number;
@@ -12,7 +12,7 @@ export interface ICartItem {
     description:  string;
     brand: string; 
     inStock: boolean;
-    image: string; // Optional: for displaying in the UI
+    image: string; 
   }
   
   interface CartState {
