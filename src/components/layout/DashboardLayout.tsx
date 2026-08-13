@@ -31,23 +31,20 @@ const MainLayout = () => {
   };
 
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
+  const closeSidebar = () => setSidebarOpen(false);
+
+  const RoleRoutes = user?.role === userRole.Admin ? AdminRoutes : UserRoutes;
 
   return (
     <div className="flex min-h-screen bg-gray-50">
       {/* Sidebar Component */}
-      {user?.role === userRole.Admin ? (
-        <AdminRoutes isOpen={false} onClose={function (): void {
-          throw new Error("Function not implemented.");
-        } } />
-      ) : (
-        <UserRoutes isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-      )}
+      <RoleRoutes isOpen={sidebarOpen} onClose={closeSidebar} />
 
       {/* Mobile Overlay */}
       {sidebarOpen && (
         <div
           className="fixed inset-0 bg-black/60 z-30 lg:hidden"
-          onClick={() => setSidebarOpen(false)}
+          onClick={closeSidebar}
         />
       )}
 
